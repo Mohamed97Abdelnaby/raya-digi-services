@@ -93,6 +93,7 @@ const Index = () => {
         <ServiceModal
           isOpen={!!selectedService}
           onClose={() => setSelectedService(null)}
+          serviceType={selectedService}
           icon={currentService.icon}
           title={currentService.title}
           description={currentService.description}

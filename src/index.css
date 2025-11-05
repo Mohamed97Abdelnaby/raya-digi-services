@@ -109,4 +109,9 @@ All colors MUST be HSL.
   [dir="ltr"] {
     direction: ltr;
   }
+
+  .required::after {
+    content: " *";
+    @apply text-destructive;
+  }
 }
