@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Camera, DollarSign, Phone, CheckCircle } from 'lucide-react';
+import { Camera, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -14,7 +14,6 @@ import {
 } from '@/components/ui/select';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { withdrawalSchema, type WithdrawalFormData } from '@/lib/validations/withdrawalSchema';
-import { NationalIdUpload } from '@/components/NationalIdUpload';
 import { useToast } from '@/hooks/use-toast';
 
 export const WithdrawalForm = () => {
@@ -22,7 +21,6 @@ export const WithdrawalForm = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [uploadedFile, setUploadedFile] = useState<File | undefined>();
 
   const {
     register,
@@ -75,65 +73,6 @@ export const WithdrawalForm = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      {/* Quick Action Buttons */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pb-4 border-b border-border">
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          onClick={() => document.getElementById('nationalId')?.focus()}
-        >
-          <Camera className="mr-2 h-4 w-4" />
-          {t('scanNationalId')}
-        </Button>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          onClick={() => document.getElementById('amount')?.focus()}
-        >
-          <DollarSign className="mr-2 h-4 w-4" />
-          {t('enterAmount')}
-        </Button>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          onClick={() => document.getElementById('phoneNumber')?.focus()}
-        >
-          <Phone className="mr-2 h-4 w-4" />
-          {t('confirmPhone')}
-        </Button>
-      </div>
-
-      {/* National ID Field */}
-      <div className="space-y-2">
-        <Label htmlFor="nationalId" className="required">
-          {t('nationalId')}
-        </Label>
-        <Input
-          id="nationalId"
-          {...register('nationalId')}
-          placeholder={t('nationalIdHint')}
-          maxLength={14}
-          className={errors.nationalId ? 'border-destructive' : ''}
-        />
-        {errors.nationalId && (
-          <p className="text-sm text-destructive">
-            {t(errors.nationalId.message as string)}
-          </p>
-        )}
-      </div>
-
-      {/* ID Document Upload */}
-      <NationalIdUpload
-        onFileSelect={(file) => {
-          setUploadedFile(file);
-          setValue('idDocument', file);
-        }}
-        currentFile={uploadedFile}
-      />
-
       {/* Withdrawal Amount Field */}
       <div className="space-y-2">
         <Label htmlFor="amount" className="required">
@@ -188,6 +127,16 @@ export const WithdrawalForm = () => {
           </p>
         )}
       </div>
+
+      {/* Scan National ID Button */}
+      <Button
+        type="button"
+        variant="outline"
+        className="w-full"
+      >
+        <Camera className="mr-2 h-4 w-4" />
+        {t('scanNationalId')}
+      </Button>
 
       {/* Submit Button */}
       <Button

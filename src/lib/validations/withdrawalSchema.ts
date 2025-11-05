@@ -1,10 +1,6 @@
 import { z } from 'zod';
 
 export const withdrawalSchema = z.object({
-  nationalId: z
-    .string()
-    .min(1, 'fieldRequired')
-    .regex(/^\d{14}$/, 'invalidNationalId'),
   amount: z
     .string()
     .min(1, 'fieldRequired')
@@ -16,7 +12,6 @@ export const withdrawalSchema = z.object({
     .string()
     .min(1, 'fieldRequired')
     .regex(/^01[0-2,5]{1}[0-9]{8}$/, 'invalidPhone'),
-  idDocument: z.instanceof(File).optional(),
 });
 
 export type WithdrawalFormData = z.infer<typeof withdrawalSchema>;
