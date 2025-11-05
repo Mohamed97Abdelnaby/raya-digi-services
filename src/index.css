@@ -115,3 +115,28 @@ All colors MUST be HSL.
     @apply text-destructive;
   }
 }
+
+@media print {
+  /* Hide everything except the printable content */
+  body * {
+    visibility: hidden;
+  }
+  
+  .print\:block,
+  .print\:block * {
+    visibility: visible;
+  }
+  
+  .print\:block {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  /* Hide buttons and non-printable elements */
+  button,
+  .no-print {
+    display: none !important;
+  }
+}

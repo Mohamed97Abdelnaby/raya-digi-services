@@ -46,6 +46,10 @@ const translations = {
     uploadId: 'Upload ID Document',
     changeId: 'Change Document',
     optional: 'Optional',
+    printForm: 'Print Form',
+    sendWhatsApp: 'Send Form in WhatsApp',
+    withdrawalReceipt: 'Withdrawal Request Receipt',
+    requestDate: 'Request Date',
   },
   ar: {
     title: 'خدمات الفرع الرقمي',
@@ -84,6 +88,10 @@ const translations = {
     uploadId: 'تحميل مستند الهوية',
     changeId: 'تغيير المستند',
     optional: 'اختياري',
+    printForm: 'طباعة النموذج',
+    sendWhatsApp: 'إرسال النموذج في واتساب',
+    withdrawalReceipt: 'إيصال طلب السحب',
+    requestDate: 'تاريخ الطلب',
   },
 };
 

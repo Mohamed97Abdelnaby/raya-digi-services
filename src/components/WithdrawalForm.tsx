@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Camera, CheckCircle } from 'lucide-react';
+import { Camera, CheckCircle, Printer, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -21,6 +21,7 @@ export const WithdrawalForm = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [submittedData, setSubmittedData] = useState<WithdrawalFormData | null>(null);
 
   const {
     register,
@@ -43,6 +44,7 @@ export const WithdrawalForm = () => {
     // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 1500));
     
+    setSubmittedData(data);
     setIsSubmitting(false);
     setIsSuccess(true);
     
@@ -53,19 +55,86 @@ export const WithdrawalForm = () => {
     });
   };
 
-  if (isSuccess) {
+  const handlePrint = () => {
+    window.print();
+  };
+
+  const handleWhatsAppShare = () => {
+    if (!submittedData) return;
+    
+    const message = `
+*${t('withdrawalReceipt')}*
+
+${t('withdrawalAmount')}: ${submittedData.amount} ${submittedData.currency}
+${t('phoneNumber')}: ${submittedData.phoneNumber}
+${t('requestDate')}: ${new Date().toLocaleDateString()}
+
+${t('withdrawalSuccess')}
+    `.trim();
+    
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappUrl = `https://wa.me/?text=${encodedMessage}`;
+    
+    window.open(whatsappUrl, '_blank');
+  };
+
+  if (isSuccess && submittedData) {
     return (
-      <div className="flex flex-col items-center justify-center py-12 space-y-6">
-        <div className="rounded-full bg-primary/10 p-6">
-          <CheckCircle className="h-16 w-16 text-primary" />
+      <div className="space-y-6">
+        {/* Success Icon & Message */}
+        <div className="flex flex-col items-center justify-center py-8 space-y-4">
+          <div className="rounded-full bg-primary/10 p-6">
+            <CheckCircle className="h-16 w-16 text-primary" />
+          </div>
+          <div className="text-center space-y-2">
+            <h3 className="text-xl font-semibold text-foreground">
+              {t('submitRequest')}
+            </h3>
+            <p className="text-muted-foreground max-w-md">
+              {t('withdrawalSuccess')}
+            </p>
+          </div>
         </div>
-        <div className="text-center space-y-2">
-          <h3 className="text-xl font-semibold text-foreground">
-            {t('submitRequest')}
-          </h3>
-          <p className="text-muted-foreground max-w-md">
-            {t('withdrawalSuccess')}
-          </p>
+
+        {/* Printable Receipt Section (hidden on screen, shown in print) */}
+        <div className="print:block hidden print:mt-8 print:p-8">
+          <div className="text-center mb-6">
+            <h2 className="text-2xl font-bold text-primary mb-2">
+              {t('withdrawalReceipt')}
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              {t('requestDate')}: {new Date().toLocaleDateString()}
+            </p>
+          </div>
+          <div className="space-y-4 border-t border-b py-4">
+            <div className="flex justify-between">
+              <span className="font-semibold">{t('withdrawalAmount')}:</span>
+              <span>{submittedData.amount} {submittedData.currency}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="font-semibold">{t('phoneNumber')}:</span>
+              <span>{submittedData.phoneNumber}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
+          <Button
+            onClick={handlePrint}
+            variant="outline"
+            className="w-full"
+          >
+            <Printer className="mr-2 h-4 w-4" />
+            {t('printForm')}
+          </Button>
+          <Button
+            onClick={handleWhatsAppShare}
+            className="w-full bg-[#25D366] hover:bg-[#20BA5A] text-white"
+          >
+            <MessageCircle className="mr-2 h-4 w-4" />
+            {t('sendWhatsApp')}
+          </Button>
         </div>
       </div>
     );
