@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { unifiedServiceSchema, UnifiedServiceFormData } from '@/lib/validations/unifiedServiceSchema';
+import { useToast } from '@/hooks/use-toast';
 
 interface UnifiedServiceFormProps {
   serviceName: string;
@@ -14,6 +15,7 @@ interface UnifiedServiceFormProps {
 
 export const UnifiedServiceForm = ({ serviceName }: UnifiedServiceFormProps) => {
   const { t } = useLanguage();
+  const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState<'form' | 'whatsapp' | 'success'>('form');
   const [formData, setFormData] = useState<UnifiedServiceFormData | null>(null);
 
@@ -27,6 +29,10 @@ export const UnifiedServiceForm = ({ serviceName }: UnifiedServiceFormProps) => 
 
   const onSubmit = (data: UnifiedServiceFormData) => {
     setFormData(data);
+    toast({
+      title: "Successful",
+      description: "Your information has been confirmed.",
+    });
     setCurrentStep('whatsapp');
   };
 
