@@ -4,7 +4,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { LanguageToggle } from '@/components/LanguageToggle';
 import { ServiceCard } from '@/components/ServiceCard';
 import { ServiceModal } from '@/components/ServiceModal';
-import rayaLogo from '@/assets/raya-logo-new.png';
+import rayaLogo from '@/assets/raya-logo.png';
 
 type ServiceType = 'withdrawal' | 'kyc' | 'foreign' | 'exchange' | 'deposit' | 'statement' | 'chequebook' | 'mobile' | null;
 
@@ -78,7 +78,7 @@ const Index = () => {
       <header className="border-b border-border bg-card">
         <div className="container mx-auto flex items-center justify-between px-6 py-8">
           <div className="flex items-center gap-4">
-            <img src={rayaLogo} alt="Raya IT" className="h-28 w-auto" />
+            <img src={rayaLogo} alt="Raya IT" className="h-24 w-auto" />
           </div>
           <LanguageToggle />
         </div>
