@@ -50,23 +50,6 @@ const translations = {
     sendWhatsApp: 'Send Form in WhatsApp',
     withdrawalReceipt: 'Withdrawal Request Receipt',
     requestDate: 'Request Date',
-    
-    // Banking Actions
-    depositAboveLimit: 'Deposit Above Limit',
-    depositAboveLimitDesc: 'Process deposits exceeding standard limits with enhanced verification',
-    depositAboveLimitDetails: 'Submit large deposit requests with required documentation for amounts exceeding your standard daily limit. Our team will process your request promptly.',
-    statementPrinting: 'Statement Printing',
-    statementPrintingDesc: 'Generate and print your account statements instantly',
-    statementPrintingDetails: 'Request printed statements for any date range. Select your preferred format and receive detailed transaction history.',
-    chequeBookRequest: 'Cheque Book Request',
-    chequeBookRequestDesc: 'Order new cheque books for your accounts',
-    chequeBookRequestDetails: 'Request a new cheque book with customized options. Choose the number of leaves and delivery preferences.',
-    mobilePrestaging: 'Mobile Prestaging',
-    mobilePrestatingDesc: 'Pre-configure your mobile banking settings and preferences',
-    mobilePrestatingDetails: 'Set up your mobile banking profile in advance. Configure security settings, biometric authentication, and notification preferences.',
-    bankingActions: 'Banking Actions',
-    bankingActionsTagline: 'Quick access to essential banking services',
-    footer: '© 2024 Raya IT. All rights reserved.',
   },
   ar: {
     title: 'خدمات الفرع الرقمي',
@@ -109,23 +92,6 @@ const translations = {
     sendWhatsApp: 'إرسال النموذج في واتساب',
     withdrawalReceipt: 'إيصال طلب السحب',
     requestDate: 'تاريخ الطلب',
-    
-    // Banking Actions
-    depositAboveLimit: 'إيداع أعلى من الحد',
-    depositAboveLimitDesc: 'معالجة الودائع التي تتجاوز الحدود القياسية مع التحقق المعزز',
-    depositAboveLimitDetails: 'قدم طلبات الإيداع الكبيرة مع المستندات المطلوبة للمبالغ التي تتجاوز الحد اليومي القياسي. سيقوم فريقنا بمعالجة طلبك على الفور.',
-    statementPrinting: 'طباعة الكشوف',
-    statementPrintingDesc: 'إنشاء وطباعة كشوف حسابك فوراً',
-    statementPrintingDetails: 'اطلب كشوف مطبوعة لأي نطاق زمني. اختر التنسيق المفضل لديك واحصل على تاريخ المعاملات التفصيلي.',
-    chequeBookRequest: 'طلب دفتر شيكات',
-    chequeBookRequestDesc: 'اطلب دفاتر شيكات جديدة لحساباتك',
-    chequeBookRequestDetails: 'اطلب دفتر شيكات جديد مع خيارات مخصصة. اختر عدد الأوراق وتفضيلات التسليم.',
-    mobilePrestaging: 'الإعداد المسبق للجوال',
-    mobilePrestatingDesc: 'قم بتكوين إعدادات وتفضيلات الخدمات المصرفية عبر الهاتف المحمول مسبقاً',
-    mobilePrestatingDetails: 'قم بإعداد ملف تعريف الخدمات المصرفية عبر الهاتف المحمول الخاص بك مسبقاً. قم بتكوين إعدادات الأمان ومصادقة القياسات الحيوية وتفضيلات الإشعارات.',
-    bankingActions: 'الإجراءات المصرفية',
-    bankingActionsTagline: 'وصول سريع للخدمات المصرفية الأساسية',
-    footer: '© 2024 رايا تكنولوجيا المعلومات. جميع الحقوق محفوظة.',
   },
 };
 
