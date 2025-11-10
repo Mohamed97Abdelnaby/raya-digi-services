@@ -4,7 +4,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { LanguageToggle } from '@/components/LanguageToggle';
 import { ServiceCard } from '@/components/ServiceCard';
 import { ServiceModal } from '@/components/ServiceModal';
-import rayaLogo from '@/assets/raya-logo.png';
+import rayaLogo from '@/assets/raya-logo-new.png';
 
 type ServiceType = 'withdrawal' | 'kyc' | 'foreign' | 'exchange' | 'deposit' | 'statement' | 'chequebook' | 'mobile' | null;
 
