@@ -8,12 +8,12 @@ export const LanguageToggle = () => {
   return (
     <Button
       variant="outline"
-      size="sm"
+      size="lg"
       onClick={toggleLanguage}
       className="gap-2 transition-all duration-300 hover:shadow-md"
     >
-      <Languages className="h-4 w-4" />
-      <span className="font-medium">{language === 'en' ? 'العربية' : 'English'}</span>
+      <Languages className="h-5 w-5" />
+      <span className="text-base font-semibold">{language === 'en' ? 'العربية' : 'English'}</span>
     </Button>
   );
 };
