@@ -61,25 +61,13 @@ Please process this request at your earliest convenience.`;
 
   if (currentStep === 'whatsapp' && formData) {
     return (
-      <div className="space-y-6">
-        <div className="rounded-lg bg-muted p-4 space-y-2">
-          <div className="flex justify-between">
-            <span className="font-medium text-muted-foreground">{t('fullName')}:</span>
-            <span className="text-foreground">{formData.fullName}</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="font-medium text-muted-foreground">{t('mobileNumber')}:</span>
-            <span className="text-foreground">{formData.mobileNumber}</span>
-          </div>
-        </div>
-        <Button
-          onClick={handleSendWhatsApp}
-          className="w-full"
-          size="lg"
-        >
-          {t('sendWhatsAppButton')}
-        </Button>
-      </div>
+      <Button
+        onClick={handleSendWhatsApp}
+        className="w-full"
+        size="lg"
+      >
+        {t('sendWhatsAppButton')}
+      </Button>
     );
   }
 
