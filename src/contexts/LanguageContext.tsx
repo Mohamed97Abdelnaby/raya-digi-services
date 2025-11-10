@@ -50,6 +50,12 @@ const translations = {
     sendWhatsApp: 'Send Form in WhatsApp',
     withdrawalReceipt: 'Withdrawal Request Receipt',
     requestDate: 'Request Date',
+    
+    // Deposit Form
+    depositAmount: 'Deposit Amount',
+    depositReceipt: 'Deposit Receipt',
+    depositSuccess: 'Your deposit request has been submitted successfully! Our team will process it shortly.',
+    depositRequestTitle: 'Deposit Request Form',
     depositAboveLimit: 'Deposit Above Limit',
     depositAboveLimitDesc: 'Process deposits exceeding standard limits with secure verification',
     depositAboveLimitDetails: 'Submit large deposit requests with required documentation for amounts exceeding your standard daily limit. Our secure verification process ensures your transaction is safe and compliant with banking regulations.',
@@ -104,6 +110,12 @@ const translations = {
     sendWhatsApp: 'إرسال النموذج في واتساب',
     withdrawalReceipt: 'إيصال طلب السحب',
     requestDate: 'تاريخ الطلب',
+    
+    // Deposit Form
+    depositAmount: 'مبلغ الإيداع',
+    depositReceipt: 'إيصال الإيداع',
+    depositSuccess: 'تم إرسال طلب الإيداع الخاص بك بنجاح! سيقوم فريقنا بمعالجته قريباً.',
+    depositRequestTitle: 'نموذج طلب الإيداع',
     depositAboveLimit: 'إيداع أعلى من الحد',
     depositAboveLimitDesc: 'معالجة الودائع التي تتجاوز الحدود القياسية مع التحقق الآمن',
     depositAboveLimitDetails: 'قدم طلبات الإيداع الكبيرة مع المستندات المطلوبة للمبالغ التي تتجاوز الحد اليومي القياسي. تضمن عملية التحقق الآمنة لدينا أن تكون معاملتك آمنة ومتوافقة مع اللوائح المصرفية.',

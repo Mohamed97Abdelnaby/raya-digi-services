@@ -8,6 +8,7 @@ import {
 import { LucideIcon } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { WithdrawalForm } from '@/components/WithdrawalForm';
+import { DepositForm } from '@/components/DepositForm';
 
 type ServiceType = 'withdrawal' | 'kyc' | 'foreign' | 'exchange' | 'deposit' | 'statement' | 'chequebook' | 'mobile' | null;
 
@@ -32,6 +33,7 @@ export const ServiceModal = ({
 }: ServiceModalProps) => {
   const { t } = useLanguage();
   const isWithdrawal = serviceType === 'withdrawal';
+  const isDeposit = serviceType === 'deposit';
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -43,9 +45,9 @@ export const ServiceModal = ({
             </div>
           </div>
           <DialogTitle className="text-center text-2xl font-bold">
-            {isWithdrawal ? t('withdrawalRequestTitle') : title}
+            {isWithdrawal ? t('withdrawalRequestTitle') : isDeposit ? t('depositRequestTitle') : title}
           </DialogTitle>
-          {!isWithdrawal && (
+          {!isWithdrawal && !isDeposit && (
             <DialogDescription className="text-center text-base pt-2">
               {description}
             </DialogDescription>
@@ -54,6 +56,8 @@ export const ServiceModal = ({
         <div className="mt-4">
           {isWithdrawal ? (
             <WithdrawalForm />
+          ) : isDeposit ? (
+            <DepositForm />
           ) : (
             <p className="text-sm text-muted-foreground leading-relaxed">
               {details}
