@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { CheckCircle } from 'lucide-react';
+import { CheckCircle, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -69,9 +69,10 @@ Please process this request at your earliest convenience.`;
     return (
       <Button
         onClick={handleSendWhatsApp}
-        className="w-full"
+        className="w-full bg-[#25D366] hover:bg-[#20BA5A] text-white"
         size="lg"
       >
+        <MessageCircle className="mr-2 h-4 w-4" />
         {t('sendWhatsAppButton')}
       </Button>
     );
