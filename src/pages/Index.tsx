@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { Banknote, FileText, Coins, ArrowLeftRight } from 'lucide-react';
+import { Banknote, FileText, Coins, ArrowLeftRight, PiggyBank, Printer, BookOpen, Smartphone } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { LanguageToggle } from '@/components/LanguageToggle';
 import { ServiceCard } from '@/components/ServiceCard';
 import { ServiceModal } from '@/components/ServiceModal';
 import rayaLogo from '@/assets/raya-logo.png';
 
-type ServiceType = 'withdrawal' | 'kyc' | 'foreign' | 'exchange' | null;
+type ServiceType = 'withdrawal' | 'kyc' | 'foreign' | 'exchange' | 'deposit' | 'statement' | 'chequebook' | 'mobile' | null;
 
 const Index = () => {
   const { t } = useLanguage();
@@ -40,6 +40,34 @@ const Index = () => {
       title: t('moneyExchange'),
       description: t('moneyExchangeDesc'),
       details: t('moneyExchangeDetails'),
+    },
+    {
+      id: 'deposit' as const,
+      icon: PiggyBank,
+      title: t('depositAboveLimit'),
+      description: t('depositAboveLimitDesc'),
+      details: t('depositAboveLimitDetails'),
+    },
+    {
+      id: 'statement' as const,
+      icon: Printer,
+      title: t('statementPrinting'),
+      description: t('statementPrintingDesc'),
+      details: t('statementPrintingDetails'),
+    },
+    {
+      id: 'chequebook' as const,
+      icon: BookOpen,
+      title: t('chequeBookRequest'),
+      description: t('chequeBookRequestDesc'),
+      details: t('chequeBookRequestDetails'),
+    },
+    {
+      id: 'mobile' as const,
+      icon: Smartphone,
+      title: t('mobilePrestaging'),
+      description: t('mobilePrestaging Desc'),
+      details: t('mobilePrestaging Details'),
     },
   ];
 

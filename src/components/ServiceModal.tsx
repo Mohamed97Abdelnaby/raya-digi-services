@@ -9,7 +9,7 @@ import { LucideIcon } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { WithdrawalForm } from '@/components/WithdrawalForm';
 
-type ServiceType = 'withdrawal' | 'kyc' | 'foreign' | 'exchange' | null;
+type ServiceType = 'withdrawal' | 'kyc' | 'foreign' | 'exchange' | 'deposit' | 'statement' | 'chequebook' | 'mobile' | null;
 
 interface ServiceModalProps {
   isOpen: boolean;
