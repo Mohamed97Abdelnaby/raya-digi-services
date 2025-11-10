@@ -1,16 +1,8 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { LucideIcon } from 'lucide-react';
-import { useLanguage } from '@/contexts/LanguageContext';
-import { WithdrawalForm } from '@/components/WithdrawalForm';
-import { DepositForm } from '@/components/DepositForm';
+import { UnifiedServiceForm } from '@/components/UnifiedServiceForm';
 
-type ServiceType = 'withdrawal' | 'kyc' | 'foreign' | 'exchange' | 'deposit' | 'statement' | 'chequebook' | 'mobile' | null;
+type ServiceType = 'kyc' | 'foreign' | 'exchange' | 'statement' | 'chequebook' | 'mobile' | null;
 
 interface ServiceModalProps {
   isOpen: boolean;
@@ -22,47 +14,20 @@ interface ServiceModalProps {
   details: string;
 }
 
-export const ServiceModal = ({
-  isOpen,
-  onClose,
-  serviceType,
-  icon: Icon,
-  title,
-  description,
-  details,
-}: ServiceModalProps) => {
-  const { t } = useLanguage();
-  const isWithdrawal = serviceType === 'withdrawal';
-  const isDeposit = serviceType === 'deposit';
-
+export const ServiceModal = ({ isOpen, onClose, icon: Icon, title }: ServiceModalProps) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className={isWithdrawal ? "sm:max-w-[600px]" : "sm:max-w-[500px]"}>
+      <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <div className="mb-4 flex justify-center">
-            <div className="rounded-full bg-primary/10 p-4">
-              <Icon className="h-10 w-10 text-primary" />
-            </div>
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
+            <Icon className="h-8 w-8 text-primary" />
           </div>
           <DialogTitle className="text-center text-2xl font-bold">
-            {isWithdrawal ? t('withdrawalRequestTitle') : isDeposit ? t('depositRequestTitle') : title}
+            {title}
           </DialogTitle>
-          {!isWithdrawal && !isDeposit && (
-            <DialogDescription className="text-center text-base pt-2">
-              {description}
-            </DialogDescription>
-          )}
         </DialogHeader>
         <div className="mt-4">
-          {isWithdrawal ? (
-            <WithdrawalForm />
-          ) : isDeposit ? (
-            <DepositForm />
-          ) : (
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              {details}
-            </p>
-          )}
+          <UnifiedServiceForm serviceName={title} />
         </div>
       </DialogContent>
     </Dialog>

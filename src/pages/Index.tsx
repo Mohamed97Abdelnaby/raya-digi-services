@@ -6,20 +6,13 @@ import { ServiceCard } from '@/components/ServiceCard';
 import { ServiceModal } from '@/components/ServiceModal';
 import rayaLogo from '@/assets/raya-logo.png';
 
-type ServiceType = 'withdrawal' | 'kyc' | 'foreign' | 'exchange' | 'deposit' | 'statement' | 'chequebook' | 'mobile' | null;
+type ServiceType = 'kyc' | 'foreign' | 'exchange' | 'statement' | 'chequebook' | 'mobile' | null;
 
 const Index = () => {
   const { t } = useLanguage();
   const [selectedService, setSelectedService] = useState<ServiceType>(null);
 
   const services = [
-    {
-      id: 'withdrawal' as const,
-      icon: Banknote,
-      title: t('withdrawal'),
-      description: t('withdrawalDesc'),
-      details: t('withdrawalDetails'),
-    },
     {
       id: 'kyc' as const,
       icon: FileText,
@@ -40,13 +33,6 @@ const Index = () => {
       title: t('moneyExchange'),
       description: t('moneyExchangeDesc'),
       details: t('moneyExchangeDetails'),
-    },
-    {
-      id: 'deposit' as const,
-      icon: PiggyBank,
-      title: t('depositAboveLimit'),
-      description: t('depositAboveLimitDesc'),
-      details: t('depositAboveLimitDetails'),
     },
     {
       id: 'statement' as const,
@@ -95,7 +81,7 @@ const Index = () => {
         </div>
 
         <div className="mx-auto max-w-6xl">
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {services.map((service) => (
               <ServiceCard
                 key={service.id}
