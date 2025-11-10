@@ -50,6 +50,17 @@ const translations = {
     sendWhatsApp: 'Send Form in WhatsApp',
     withdrawalReceipt: 'Withdrawal Request Receipt',
     requestDate: 'Request Date',
+    printReceipt: 'Print Receipt',
+    
+    // Unified Service Form
+    fullName: 'Full Name',
+    fullNameHint: 'Enter your full name',
+    mobileNumber: 'Mobile Number',
+    mobileNumberHint: 'Enter your Egyptian mobile number (e.g., 01012345678)',
+    confirmButton: 'Confirm',
+    sendWhatsAppButton: 'Send Message via WhatsApp',
+    requestSubmittedSuccess: 'Your request has been submitted successfully! A message has been sent via WhatsApp.',
+    serviceRequest: 'Request',
     
     // Deposit Form
     depositAmount: 'Deposit Amount',
@@ -110,6 +121,17 @@ const translations = {
     sendWhatsApp: 'إرسال النموذج في واتساب',
     withdrawalReceipt: 'إيصال طلب السحب',
     requestDate: 'تاريخ الطلب',
+    printReceipt: 'طباعة الإيصال',
+    
+    // Unified Service Form
+    fullName: 'الاسم الكامل',
+    fullNameHint: 'أدخل اسمك الكامل',
+    mobileNumber: 'رقم الهاتف المحمول',
+    mobileNumberHint: 'أدخل رقم هاتفك المحمول المصري (مثال: 01012345678)',
+    confirmButton: 'تأكيد',
+    sendWhatsAppButton: 'إرسال رسالة عبر واتساب',
+    requestSubmittedSuccess: 'تم إرسال طلبك بنجاح! تم إرسال رسالة عبر واتساب.',
+    serviceRequest: 'طلب',
     
     // Deposit Form
     depositAmount: 'مبلغ الإيداع',

@@ -9,6 +9,7 @@ import { LucideIcon } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { WithdrawalForm } from '@/components/WithdrawalForm';
 import { DepositForm } from '@/components/DepositForm';
+import { UnifiedServiceForm } from '@/components/UnifiedServiceForm';
 
 type ServiceType = 'withdrawal' | 'kyc' | 'foreign' | 'exchange' | 'deposit' | 'statement' | 'chequebook' | 'mobile' | null;
 
@@ -34,10 +35,13 @@ export const ServiceModal = ({
   const { t } = useLanguage();
   const isWithdrawal = serviceType === 'withdrawal';
   const isDeposit = serviceType === 'deposit';
+  const isUnifiedForm = serviceType === 'kyc' || serviceType === 'foreign' || 
+                        serviceType === 'exchange' || serviceType === 'statement' || 
+                        serviceType === 'chequebook' || serviceType === 'mobile';
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className={isWithdrawal ? "sm:max-w-[600px]" : "sm:max-w-[500px]"}>
+      <DialogContent className={(isWithdrawal || isDeposit) ? "sm:max-w-[600px]" : "sm:max-w-[500px]"}>
         <DialogHeader>
           <div className="mb-4 flex justify-center">
             <div className="rounded-full bg-primary/10 p-4">
@@ -47,7 +51,7 @@ export const ServiceModal = ({
           <DialogTitle className="text-center text-2xl font-bold">
             {isWithdrawal ? t('withdrawalRequestTitle') : isDeposit ? t('depositRequestTitle') : title}
           </DialogTitle>
-          {!isWithdrawal && !isDeposit && (
+          {!isWithdrawal && !isDeposit && !isUnifiedForm && (
             <DialogDescription className="text-center text-base pt-2">
               {description}
             </DialogDescription>
@@ -58,6 +62,8 @@ export const ServiceModal = ({
             <WithdrawalForm />
           ) : isDeposit ? (
             <DepositForm />
+          ) : isUnifiedForm ? (
+            <UnifiedServiceForm serviceName={title} />
           ) : (
             <p className="text-sm text-muted-foreground leading-relaxed">
               {details}
