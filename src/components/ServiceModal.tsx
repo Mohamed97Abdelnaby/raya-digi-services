@@ -64,13 +64,21 @@ export const ServiceModal = ({
           ) : isDeposit ? (
             <DepositForm onClose={onClose} />
           ) : isUnifiedForm ? (
-        <UnifiedServiceForm 
-          serviceName={title} 
-          showScanButton={serviceType === 'kyc'}
-          showExitButton={serviceType === 'kyc'}
-          showPrintWhatsApp={serviceType === 'kyc'}
-          onClose={onClose}
-        />
+            (() => {
+              const isKYC = serviceType === 'kyc';
+              const hasWhatsAppOnly = ['foreign', 'exchange', 'statement', 'chequebook', 'mobile', 'chequeencashment'].includes(serviceType);
+              
+              return (
+                <UnifiedServiceForm 
+                  serviceName={title} 
+                  showScanButton={isKYC}
+                  showExitButton={isKYC || hasWhatsAppOnly}
+                  showPrintWhatsApp={isKYC}
+                  showWhatsAppOnly={hasWhatsAppOnly}
+                  onClose={onClose}
+                />
+              );
+            })()
           ) : (
             <p className="text-sm text-muted-foreground leading-relaxed">
               {details}

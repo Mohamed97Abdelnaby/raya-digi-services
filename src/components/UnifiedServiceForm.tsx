@@ -24,6 +24,7 @@ interface UnifiedServiceFormProps {
   showScanButton?: boolean;
   showExitButton?: boolean;
   showPrintWhatsApp?: boolean;
+  showWhatsAppOnly?: boolean;
   onClose?: () => void;
 }
 
@@ -32,6 +33,7 @@ export const UnifiedServiceForm = ({
   showScanButton = false,
   showExitButton = false,
   showPrintWhatsApp = false,
+  showWhatsAppOnly = false,
   onClose 
 }: UnifiedServiceFormProps) => {
   const { t } = useLanguage();
@@ -129,7 +131,7 @@ ${t('kycSuccess')}`;
           </div>
         )}
 
-        {/* Action Buttons - Show only for KYC */}
+        {/* Action Buttons - Show Print + WhatsApp for KYC */}
         {showPrintWhatsApp && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
             <Button
@@ -140,6 +142,19 @@ ${t('kycSuccess')}`;
               <Printer className="mr-2 h-4 w-4" />
               {t('printForm')}
             </Button>
+            <Button
+              onClick={handleWhatsAppShare}
+              className="w-full bg-[#25D366] hover:bg-[#20BA5A] text-white"
+            >
+              <MessageCircle className="mr-2 h-4 w-4" />
+              {t('sendWhatsApp')}
+            </Button>
+          </div>
+        )}
+
+        {/* WhatsApp Only Button - Full Width for other services */}
+        {showWhatsAppOnly && (
+          <div className="pt-4">
             <Button
               onClick={handleWhatsAppShare}
               className="w-full bg-[#25D366] hover:bg-[#20BA5A] text-white"
