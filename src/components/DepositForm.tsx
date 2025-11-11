@@ -237,6 +237,7 @@ ${t('depositSuccess')}
         type="button"
         variant="outline"
         className="w-full"
+        disabled={!isValid}
       >
         <Camera className="mr-2 h-4 w-4" />
         {t('scanNationalId')}
