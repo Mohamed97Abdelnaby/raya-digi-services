@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { CheckCircle, MessageCircle, Camera } from 'lucide-react';
+import { CheckCircle, MessageCircle, Camera, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { unifiedServiceSchema, UnifiedServiceFormData } from '@/lib/validations/unifiedServiceSchema';
 import { useToast } from '@/hooks/use-toast';
@@ -151,15 +152,26 @@ Please process this request at your earliest convenience.`;
       </div>
 
       {showScanButton && (
-        <Button
-          type="button"
-          variant="outline"
-          className="w-full"
-          disabled={!isValid}
-        >
-          <Camera className="mr-2 h-4 w-4" />
-          {t('scanNationalId')}
-        </Button>
+        <>
+          {/* National ID Scanner Instruction */}
+          <Alert className="border-primary/20 bg-primary/5">
+            <Info className="h-4 w-4 text-primary" />
+            <AlertDescription className="text-foreground">
+              {t('scanIdInstruction')}
+            </AlertDescription>
+          </Alert>
+
+          {/* Scan National ID Button */}
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full"
+            disabled={!isValid}
+          >
+            <Camera className="mr-2 h-4 w-4" />
+            {t('scanNationalId')}
+          </Button>
+        </>
       )}
 
       <Button
