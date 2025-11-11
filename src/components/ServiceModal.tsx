@@ -60,11 +60,16 @@ export const ServiceModal = ({
         </DialogHeader>
         <div className="mt-4">
           {isWithdrawal ? (
-            <WithdrawalForm />
+            <WithdrawalForm onClose={onClose} />
           ) : isDeposit ? (
-            <DepositForm />
+            <DepositForm onClose={onClose} />
           ) : isUnifiedForm ? (
-            <UnifiedServiceForm serviceName={title} showScanButton={serviceType === 'kyc'} />
+            <UnifiedServiceForm 
+              serviceName={title} 
+              showScanButton={serviceType === 'kyc'}
+              showExitButton={serviceType === 'kyc'}
+              onClose={onClose}
+            />
           ) : (
             <p className="text-sm text-muted-foreground leading-relaxed">
               {details}

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Camera, CheckCircle, Printer, MessageCircle, Info } from 'lucide-react';
+import { Camera, CheckCircle, Printer, MessageCircle, Info, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -26,7 +26,11 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 
-export const WithdrawalForm = () => {
+interface WithdrawalFormProps {
+  onClose?: () => void;
+}
+
+export const WithdrawalForm = ({ onClose }: WithdrawalFormProps = {}) => {
   const { t } = useLanguage();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -153,6 +157,18 @@ ${t('withdrawalSuccess')}
             {t('sendWhatsApp')}
           </Button>
         </div>
+
+        {/* Exit Button */}
+        {onClose && (
+          <Button
+            onClick={onClose}
+            variant="outline"
+            className="w-full mt-4"
+          >
+            <X className="mr-2 h-4 w-4" />
+            {t('exitButton')}
+          </Button>
+        )}
       </div>
     );
   }

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { CheckCircle, MessageCircle, Camera, Info } from 'lucide-react';
+import { CheckCircle, MessageCircle, Camera, Info, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -22,9 +22,16 @@ import {
 interface UnifiedServiceFormProps {
   serviceName: string;
   showScanButton?: boolean;
+  showExitButton?: boolean;
+  onClose?: () => void;
 }
 
-export const UnifiedServiceForm = ({ serviceName, showScanButton = false }: UnifiedServiceFormProps) => {
+export const UnifiedServiceForm = ({ 
+  serviceName, 
+  showScanButton = false,
+  showExitButton = false,
+  onClose 
+}: UnifiedServiceFormProps) => {
   const { t } = useLanguage();
   const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState<'form' | 'whatsapp' | 'success'>('form');
@@ -81,6 +88,18 @@ Please process this request at your earliest convenience.`;
             {t('requestSubmittedSuccess')}
           </p>
         </div>
+
+        {/* Exit Button */}
+        {showExitButton && onClose && (
+          <Button
+            onClick={onClose}
+            variant="outline"
+            className="w-full"
+          >
+            <X className="mr-2 h-4 w-4" />
+            {t('exitButton')}
+          </Button>
+        )}
 
         {/* Thank You Dialog */}
         <AlertDialog open={showThankYou} onOpenChange={setShowThankYou}>

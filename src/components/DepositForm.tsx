@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Camera, CheckCircle, Printer, MessageCircle, Info } from 'lucide-react';
+import { Camera, CheckCircle, Printer, MessageCircle, Info, X } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -26,7 +26,11 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { depositSchema, type DepositFormData } from '@/lib/validations/depositSchema';
 import { useToast } from '@/hooks/use-toast';
 
-export const DepositForm = () => {
+interface DepositFormProps {
+  onClose?: () => void;
+}
+
+export const DepositForm = ({ onClose }: DepositFormProps = {}) => {
   const { t } = useLanguage();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -153,6 +157,18 @@ ${t('depositSuccess')}
             {t('sendWhatsApp')}
           </Button>
         </div>
+
+        {/* Exit Button */}
+        {onClose && (
+          <Button
+            onClick={onClose}
+            variant="outline"
+            className="w-full mt-4"
+          >
+            <X className="mr-2 h-4 w-4" />
+            {t('exitButton')}
+          </Button>
+        )}
 
         {/* Thank You Dialog */}
         <AlertDialog open={showThankYou} onOpenChange={setShowThankYou}>

@@ -55,6 +55,7 @@ const translations = {
     thankYouTitle: 'Thank You!',
     thankYouMessage: 'Thank you for choosing Raya BranchXperience 4.0',
     closeButton: 'Close',
+    exitButton: 'Exit',
     
     // Unified Service Form
     fullName: 'Full Name',
@@ -133,6 +134,7 @@ const translations = {
     thankYouTitle: 'شكراً لك!',
     thankYouMessage: 'شكراً لاختيارك Raya BranchXperience 4.0',
     closeButton: 'إغلاق',
+    exitButton: 'خروج',
     
     // Unified Service Form
     fullName: 'الاسم الكامل',
