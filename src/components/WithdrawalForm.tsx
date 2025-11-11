@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Camera, CheckCircle, Printer, MessageCircle } from 'lucide-react';
+import { Camera, CheckCircle, Printer, MessageCircle, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -15,6 +15,7 @@ import {
 import { useLanguage } from '@/contexts/LanguageContext';
 import { withdrawalSchema, type WithdrawalFormData } from '@/lib/validations/withdrawalSchema';
 import { useToast } from '@/hooks/use-toast';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 export const WithdrawalForm = () => {
   const { t } = useLanguage();
@@ -196,6 +197,14 @@ ${t('withdrawalSuccess')}
           </p>
         )}
       </div>
+
+      {/* National ID Scanner Instruction */}
+      <Alert className="border-primary/20 bg-primary/5">
+        <Info className="h-4 w-4 text-primary" />
+        <AlertDescription className="text-foreground">
+          {t('scanIdInstruction')}
+        </AlertDescription>
+      </Alert>
 
       {/* Scan National ID Button */}
       <Button

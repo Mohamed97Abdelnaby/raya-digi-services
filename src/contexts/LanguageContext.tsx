@@ -51,6 +51,7 @@ const translations = {
     withdrawalReceipt: 'Withdrawal Request Receipt',
     requestDate: 'Request Date',
     printReceipt: 'Print Receipt',
+    scanIdInstruction: 'Please place your National ID card on the scanner before clicking the button below',
     
     // Unified Service Form
     fullName: 'Full Name',
@@ -122,6 +123,7 @@ const translations = {
     withdrawalReceipt: 'إيصال طلب السحب',
     requestDate: 'تاريخ الطلب',
     printReceipt: 'طباعة الإيصال',
+    scanIdInstruction: 'يرجى وضع بطاقة الرقم القومي الخاصة بك على الماسح الضوئي قبل الضغط على الزر أدناه',
     
     // Unified Service Form
     fullName: 'الاسم الكامل',
