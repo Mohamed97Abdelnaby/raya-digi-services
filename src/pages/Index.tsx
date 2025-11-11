@@ -112,7 +112,7 @@ const Index = () => {
       <footer className="mt-auto border-t border-border py-8">
         <div className="container mx-auto px-6 text-center">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} Raya IT. {t('tagline')}
+            Powered by Raya BranchXperience 4.0
           </p>
         </div>
       </footer>
