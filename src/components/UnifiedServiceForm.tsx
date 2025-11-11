@@ -20,9 +20,10 @@ import {
 
 interface UnifiedServiceFormProps {
   serviceName: string;
+  showScanButton?: boolean;
 }
 
-export const UnifiedServiceForm = ({ serviceName }: UnifiedServiceFormProps) => {
+export const UnifiedServiceForm = ({ serviceName, showScanButton = false }: UnifiedServiceFormProps) => {
   const { t } = useLanguage();
   const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState<'form' | 'whatsapp' | 'success'>('form');
@@ -149,15 +150,17 @@ Please process this request at your earliest convenience.`;
         )}
       </div>
 
-      <Button
-        type="button"
-        variant="outline"
-        className="w-full"
-        disabled={!isValid}
-      >
-        <Camera className="mr-2 h-4 w-4" />
-        {t('scanNationalId')}
-      </Button>
+      {showScanButton && (
+        <Button
+          type="button"
+          variant="outline"
+          className="w-full"
+          disabled={!isValid}
+        >
+          <Camera className="mr-2 h-4 w-4" />
+          {t('scanNationalId')}
+        </Button>
+      )}
 
       <Button
         type="submit"

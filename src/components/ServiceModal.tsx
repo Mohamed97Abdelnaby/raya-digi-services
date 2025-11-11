@@ -64,7 +64,7 @@ export const ServiceModal = ({
           ) : isDeposit ? (
             <DepositForm />
           ) : isUnifiedForm ? (
-            <UnifiedServiceForm serviceName={title} />
+            <UnifiedServiceForm serviceName={title} showScanButton={serviceType === 'kyc'} />
           ) : (
             <p className="text-sm text-muted-foreground leading-relaxed">
               {details}
