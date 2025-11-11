@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { CheckCircle, MessageCircle, Camera, Info, X } from 'lucide-react';
+import { CheckCircle, MessageCircle, Camera, Info, X, Printer } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -23,6 +23,7 @@ interface UnifiedServiceFormProps {
   serviceName: string;
   showScanButton?: boolean;
   showExitButton?: boolean;
+  showPrintWhatsApp?: boolean;
   onClose?: () => void;
 }
 
@@ -30,6 +31,7 @@ export const UnifiedServiceForm = ({
   serviceName, 
   showScanButton = false,
   showExitButton = false,
+  showPrintWhatsApp = false,
   onClose 
 }: UnifiedServiceFormProps) => {
   const { t } = useLanguage();
@@ -53,22 +55,6 @@ export const UnifiedServiceForm = ({
       title: "Successful",
       description: "Your information has been confirmed.",
     });
-    setCurrentStep('whatsapp');
-  };
-
-  const handleSendWhatsApp = () => {
-    if (!formData) return;
-
-    const message = `*${serviceName} ${t('serviceRequest')}*
-
-${t('fullName')}: ${formData.fullName}
-${t('mobileNumber')}: ${formData.mobileNumber}
-${t('requestDate')}: ${new Date().toLocaleDateString()}
-
-Please process this request at your earliest convenience.`;
-
-    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
     setCurrentStep('success');
     
     // Show thank you dialog after a brief delay
@@ -77,24 +63,94 @@ Please process this request at your earliest convenience.`;
     }, 500);
   };
 
+  const handlePrint = () => {
+    window.print();
+  };
+
+  const handleWhatsAppShare = () => {
+    if (!formData) return;
+
+    const message = `*${serviceName} ${t('serviceRequest')}*
+
+${t('fullName')}: ${formData.fullName}
+${t('mobileNumber')}: ${formData.mobileNumber}
+${t('requestDate')}: ${new Date().toLocaleDateString()}
+
+${t('kycSuccess')}`;
+
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
   if (currentStep === 'success') {
     return (
-      <>
-        <div className="flex flex-col items-center justify-center space-y-4 py-8">
-          <div className="rounded-full bg-green-100 p-4">
-            <CheckCircle className="h-12 w-12 text-green-600" />
+      <div className="space-y-6">
+        {/* Success Icon & Message */}
+        <div className="flex flex-col items-center justify-center py-8 space-y-4">
+          <div className="rounded-full bg-primary/10 p-6">
+            <CheckCircle className="h-16 w-16 text-primary" />
           </div>
-          <p className="text-center text-lg font-medium text-foreground">
-            {t('requestSubmittedSuccess')}
-          </p>
+          <div className="text-center space-y-2">
+            <h3 className="text-xl font-semibold text-foreground">
+              {showPrintWhatsApp ? t('kycConfirmTitle') : t('confirmRequest')}
+            </h3>
+            <p className="text-muted-foreground max-w-md">
+              {showPrintWhatsApp ? t('kycSuccess') : t('requestSubmittedSuccess')}
+            </p>
+          </div>
         </div>
+
+        {/* Printable Receipt Section (hidden on screen, shown in print) */}
+        {showPrintWhatsApp && formData && (
+          <div className="print:block hidden print:mt-8 print:p-8">
+            <div className="text-center mb-6">
+              <h2 className="text-2xl font-bold text-primary mb-2">
+                {serviceName} {t('serviceRequest')}
+              </h2>
+              <p className="text-sm text-muted-foreground">
+                {t('requestDate')}: {new Date().toLocaleDateString()}
+              </p>
+            </div>
+            <div className="space-y-4 border-t border-b py-4">
+              <div className="flex justify-between">
+                <span className="font-semibold">{t('fullName')}:</span>
+                <span>{formData.fullName}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-semibold">{t('mobileNumber')}:</span>
+                <span>{formData.mobileNumber}</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Action Buttons - Show only for KYC */}
+        {showPrintWhatsApp && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
+            <Button
+              onClick={handlePrint}
+              variant="outline"
+              className="w-full"
+            >
+              <Printer className="mr-2 h-4 w-4" />
+              {t('printForm')}
+            </Button>
+            <Button
+              onClick={handleWhatsAppShare}
+              className="w-full bg-[#25D366] hover:bg-[#20BA5A] text-white"
+            >
+              <MessageCircle className="mr-2 h-4 w-4" />
+              {t('sendWhatsApp')}
+            </Button>
+          </div>
+        )}
 
         {/* Exit Button */}
         {showExitButton && onClose && (
           <Button
             onClick={onClose}
             variant="outline"
-            className="w-full"
+            className="w-full mt-4"
           >
             <X className="mr-2 h-4 w-4" />
             {t('exitButton')}
@@ -119,20 +175,7 @@ Please process this request at your earliest convenience.`;
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
-      </>
-    );
-  }
-
-  if (currentStep === 'whatsapp' && formData) {
-    return (
-      <Button
-        onClick={handleSendWhatsApp}
-        className="w-full bg-[#25D366] hover:bg-[#20BA5A] text-white"
-        size="lg"
-      >
-        <MessageCircle className="mr-2 h-4 w-4" />
-        {t('sendWhatsAppButton')}
-      </Button>
+      </div>
     );
   }
 

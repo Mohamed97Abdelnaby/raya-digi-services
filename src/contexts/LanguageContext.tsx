@@ -66,6 +66,9 @@ const translations = {
     sendWhatsAppButton: 'Send Message via WhatsApp',
     requestSubmittedSuccess: 'Your request has been submitted successfully! A message has been sent via WhatsApp.',
     serviceRequest: 'Request',
+    confirmRequest: 'Confirm Request',
+    kycConfirmTitle: 'Confirm Update KYC Request',
+    kycSuccess: 'Your KYC update request has been submitted successfully. You will receive a confirmation SMS shortly.',
     
     // Deposit Form
     depositAmount: 'Deposit Amount',
@@ -145,6 +148,9 @@ const translations = {
     sendWhatsAppButton: 'إرسال رسالة عبر واتساب',
     requestSubmittedSuccess: 'تم إرسال طلبك بنجاح! تم إرسال رسالة عبر واتساب.',
     serviceRequest: 'طلب',
+    confirmRequest: 'تأكيد الطلب',
+    kycConfirmTitle: 'تأكيد طلب تحديث البيانات',
+    kycSuccess: 'تم تقديم طلب تحديث البيانات بنجاح. سوف تتلقى رسالة تأكيد نصية قريبًا.',
     
     // Deposit Form
     depositAmount: 'مبلغ الإيداع',
