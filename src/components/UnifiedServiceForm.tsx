@@ -46,6 +46,7 @@ export const UnifiedServiceForm = ({
     register,
     handleSubmit,
     formState: { errors, isSubmitting, isValid },
+    watch,
   } = useForm<UnifiedServiceFormData>({
     resolver: zodResolver(unifiedServiceSchema),
     mode: 'onChange',
@@ -58,6 +59,43 @@ export const UnifiedServiceForm = ({
       description: "Your information has been confirmed.",
     });
     setCurrentStep('success');
+  };
+
+  const handleScanNationalId = async () => {
+    const fullName = watch('fullName');
+    const mobileNumber = watch('mobileNumber');
+    
+    const requestBody = {
+      Full_name: fullName,
+      Mobile_number: mobileNumber
+    };
+    
+    try {
+      const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody),
+      });
+      
+      const data = await response.json();
+      console.log('Scan National ID Response:', data);
+      
+      toast({
+        title: t('scanSuccess'),
+        description: 'National ID scanned successfully',
+        duration: 3000,
+      });
+    } catch (error) {
+      console.error('Scan National ID Error:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to scan National ID',
+        variant: 'destructive',
+        duration: 3000,
+      });
+    }
   };
 
   const handlePrint = () => {
@@ -249,6 +287,7 @@ ${t('kycSuccess')}`;
             variant="outline"
             className="w-full"
             disabled={!isValid}
+            onClick={handleScanNationalId}
           >
             <Camera className="mr-2 h-4 w-4" />
             {t('scanNationalId')}

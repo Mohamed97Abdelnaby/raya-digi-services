@@ -71,6 +71,43 @@ export const DepositForm = ({ onClose }: DepositFormProps = {}) => {
     });
   };
 
+  const handleScanNationalId = async () => {
+    const currentValues = watch();
+    
+    const requestBody = {
+      Deposit_amount: currentValues.amount,
+      Phone_number: currentValues.phoneNumber,
+      currency: currentValues.currency
+    };
+    
+    try {
+      const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody),
+      });
+      
+      const data = await response.json();
+      console.log('Scan National ID Response:', data);
+      
+      toast({
+        title: t('scanSuccess'),
+        description: 'National ID scanned successfully',
+        duration: 3000,
+      });
+    } catch (error) {
+      console.error('Scan National ID Error:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to scan National ID',
+        variant: 'destructive',
+        duration: 3000,
+      });
+    }
+  };
+
   const handlePrint = () => {
     window.print();
     
@@ -268,6 +305,7 @@ ${t('depositSuccess')}
         variant="outline"
         className="w-full"
         disabled={!isValid}
+        onClick={handleScanNationalId}
       >
         <Camera className="mr-2 h-4 w-4" />
         {t('scanNationalId')}
