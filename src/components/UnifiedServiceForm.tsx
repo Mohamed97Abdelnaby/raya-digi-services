@@ -56,15 +56,15 @@ export const UnifiedServiceForm = ({
       description: "Your information has been confirmed.",
     });
     setCurrentStep('success');
+  };
+
+  const handlePrint = () => {
+    window.print();
     
     // Show thank you dialog after a brief delay
     setTimeout(() => {
       setShowThankYou(true);
     }, 500);
-  };
-
-  const handlePrint = () => {
-    window.print();
   };
 
   const handleWhatsAppShare = () => {
@@ -80,6 +80,11 @@ ${t('kycSuccess')}`;
 
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
+    
+    // Show thank you dialog after a brief delay
+    setTimeout(() => {
+      setShowThankYou(true);
+    }, 500);
   };
 
   if (currentStep === 'success') {
