@@ -11,7 +11,7 @@ import { WithdrawalForm } from '@/components/WithdrawalForm';
 import { DepositForm } from '@/components/DepositForm';
 import { UnifiedServiceForm } from '@/components/UnifiedServiceForm';
 
-type ServiceType = 'withdrawal' | 'kyc' | 'foreign' | 'exchange' | 'deposit' | 'statement' | 'chequebook' | 'mobile' | null;
+type ServiceType = 'withdrawal' | 'kyc' | 'foreign' | 'exchange' | 'deposit' | 'statement' | 'chequebook' | 'mobile' | 'chequeencashment' | null;
 
 interface ServiceModalProps {
   isOpen: boolean;
@@ -37,7 +37,8 @@ export const ServiceModal = ({
   const isDeposit = serviceType === 'deposit';
   const isUnifiedForm = serviceType === 'kyc' || serviceType === 'foreign' || 
                         serviceType === 'exchange' || serviceType === 'statement' || 
-                        serviceType === 'chequebook' || serviceType === 'mobile';
+                        serviceType === 'chequebook' || serviceType === 'mobile' || 
+                        serviceType === 'chequeencashment';
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>

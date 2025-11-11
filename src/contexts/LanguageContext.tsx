@@ -83,6 +83,9 @@ const translations = {
     mobilePrestaging: 'Mobile Prestaging',
     'mobilePrestaging Desc': 'Pre-configure your mobile banking settings',
     'mobilePrestaging Details': 'Set up your mobile banking profile in advance. Configure security settings, biometric authentication, notification preferences, and transaction limits before activation.',
+    chequeEncashment: 'Cheque Encashment',
+    chequeEncashmentDesc: 'Cash your cheques quickly and securely',
+    chequeEncashmentDetails: 'Submit cheque encashment requests with instant verification. Upload cheque images, verify details, and receive funds directly to your account. Secure processing with fraud detection.',
   },
   ar: {
     title: 'خدمات الفرع الرقمي',
@@ -158,6 +161,9 @@ const translations = {
     mobilePrestaging: 'الإعداد المسبق للجوال',
     'mobilePrestaging Desc': 'قم بتكوين إعدادات الخدمات المصرفية عبر الهاتف المحمول مسبقاً',
     'mobilePrestaging Details': 'قم بإعداد ملف تعريف الخدمات المصرفية عبر الهاتف المحمول الخاص بك مسبقاً. قم بتكوين إعدادات الأمان ومصادقة القياسات الحيوية وتفضيلات الإشعارات وحدود المعاملات قبل التفعيل.',
+    chequeEncashment: 'صرف الشيك',
+    chequeEncashmentDesc: 'صرف شيكاتك بسرعة وأمان',
+    chequeEncashmentDetails: 'قدم طلبات صرف الشيكات مع التحقق الفوري. قم بتحميل صور الشيك، والتحقق من التفاصيل، واستلام الأموال مباشرة إلى حسابك. معالجة آمنة مع كشف الاحتيال.',
   },
 };
 

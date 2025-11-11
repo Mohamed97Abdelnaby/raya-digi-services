@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { Banknote, FileText, Coins, ArrowLeftRight, PiggyBank, Printer, BookOpen, Smartphone } from 'lucide-react';
+import { Banknote, FileText, Coins, ArrowLeftRight, PiggyBank, Printer, BookOpen, Smartphone, Receipt } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { LanguageToggle } from '@/components/LanguageToggle';
 import { ServiceCard } from '@/components/ServiceCard';
 import { ServiceModal } from '@/components/ServiceModal';
 import rayaLogo from '@/assets/raya-logo-new.png';
 
-type ServiceType = 'withdrawal' | 'kyc' | 'foreign' | 'exchange' | 'deposit' | 'statement' | 'chequebook' | 'mobile' | null;
+type ServiceType = 'withdrawal' | 'kyc' | 'foreign' | 'exchange' | 'deposit' | 'statement' | 'chequebook' | 'mobile' | 'chequeencashment' | null;
 
 const Index = () => {
   const { t } = useLanguage();
@@ -69,6 +69,13 @@ const Index = () => {
       description: t('mobilePrestaging Desc'),
       details: t('mobilePrestaging Details'),
     },
+    {
+      id: 'chequeencashment' as const,
+      icon: Receipt,
+      title: t('chequeEncashment'),
+      description: t('chequeEncashmentDesc'),
+      details: t('chequeEncashmentDetails'),
+    },
   ];
 
   const currentService = services.find(s => s.id === selectedService);
@@ -95,7 +102,7 @@ const Index = () => {
         </div>
 
         <div className="mx-auto max-w-6xl">
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {services.map((service) => (
               <ServiceCard
                 key={service.id}
