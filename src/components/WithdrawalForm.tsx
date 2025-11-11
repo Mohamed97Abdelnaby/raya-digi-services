@@ -37,11 +37,12 @@ export const WithdrawalForm = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
     setValue,
     watch,
   } = useForm<WithdrawalFormData>({
     resolver: zodResolver(withdrawalSchema),
+    mode: 'onChange',
     defaultValues: {
       currency: 'EGP',
     },
@@ -235,7 +236,7 @@ ${t('withdrawalSuccess')}
       <Button
         type="submit"
         className="w-full"
-        disabled={isSubmitting}
+        disabled={isSubmitting || !isValid}
       >
         {isSubmitting ? (
           <span className="flex items-center gap-2">

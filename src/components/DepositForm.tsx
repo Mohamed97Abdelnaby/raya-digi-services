@@ -36,11 +36,12 @@ export const DepositForm = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
     setValue,
     watch,
   } = useForm<DepositFormData>({
     resolver: zodResolver(depositSchema),
+    mode: 'onChange',
     defaultValues: {
       currency: 'EGP',
     },
@@ -245,7 +246,7 @@ ${t('depositSuccess')}
       <Button
         type="submit"
         className="w-full"
-        disabled={isSubmitting}
+        disabled={isSubmitting || !isValid}
       >
         {isSubmitting ? (
           <span className="flex items-center gap-2">

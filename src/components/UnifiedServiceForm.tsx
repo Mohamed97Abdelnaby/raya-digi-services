@@ -32,9 +32,10 @@ export const UnifiedServiceForm = ({ serviceName }: UnifiedServiceFormProps) => 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isValid },
   } = useForm<UnifiedServiceFormData>({
     resolver: zodResolver(unifiedServiceSchema),
+    mode: 'onChange',
   });
 
   const onSubmit = (data: UnifiedServiceFormData) => {
@@ -152,7 +153,7 @@ Please process this request at your earliest convenience.`;
         type="submit"
         className="w-full"
         size="lg"
-        disabled={isSubmitting}
+        disabled={isSubmitting || !isValid}
       >
         {t('confirmButton')}
       </Button>
