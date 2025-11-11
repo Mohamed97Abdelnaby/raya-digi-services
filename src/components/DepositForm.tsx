@@ -2,6 +2,15 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Camera, CheckCircle, Printer, MessageCircle } from 'lucide-react';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -22,6 +31,7 @@ export const DepositForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [submittedData, setSubmittedData] = useState<DepositFormData | null>(null);
+  const [showThankYou, setShowThankYou] = useState(false);
 
   const {
     register,
@@ -47,6 +57,11 @@ export const DepositForm = () => {
     setSubmittedData(data);
     setIsSubmitting(false);
     setIsSuccess(true);
+    
+    // Show thank you dialog after a brief delay
+    setTimeout(() => {
+      setShowThankYou(true);
+    }, 500);
     
     toast({
       title: t('submitRequest'),
@@ -136,6 +151,25 @@ ${t('depositSuccess')}
             {t('sendWhatsApp')}
           </Button>
         </div>
+
+        {/* Thank You Dialog */}
+        <AlertDialog open={showThankYou} onOpenChange={setShowThankYou}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle className="text-center text-2xl">
+                {t('thankYouTitle')}
+              </AlertDialogTitle>
+              <AlertDialogDescription className="text-center text-lg pt-4">
+                {t('thankYouMessage')}
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogAction onClick={() => setShowThankYou(false)} className="w-full">
+                {t('closeButton')}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     );
   }

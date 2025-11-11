@@ -16,6 +16,15 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { withdrawalSchema, type WithdrawalFormData } from '@/lib/validations/withdrawalSchema';
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 
 export const WithdrawalForm = () => {
   const { t } = useLanguage();
@@ -23,6 +32,7 @@ export const WithdrawalForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [submittedData, setSubmittedData] = useState<WithdrawalFormData | null>(null);
+  const [showThankYou, setShowThankYou] = useState(false);
 
   const {
     register,
@@ -48,6 +58,11 @@ export const WithdrawalForm = () => {
     setSubmittedData(data);
     setIsSubmitting(false);
     setIsSuccess(true);
+    
+    // Show thank you dialog after a brief delay
+    setTimeout(() => {
+      setShowThankYou(true);
+    }, 500);
     
     toast({
       title: t('submitRequest'),
@@ -231,6 +246,25 @@ ${t('withdrawalSuccess')}
           t('submitRequest')
         )}
       </Button>
+
+      {/* Thank You Dialog */}
+      <AlertDialog open={showThankYou} onOpenChange={setShowThankYou}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-center text-2xl">
+              {t('thankYouTitle')}
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-center text-lg pt-4">
+              {t('thankYouMessage')}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction onClick={() => setShowThankYou(false)} className="w-full">
+              {t('closeButton')}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </form>
   );
 };

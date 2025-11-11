@@ -8,6 +8,15 @@ import { Label } from '@/components/ui/label';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { unifiedServiceSchema, UnifiedServiceFormData } from '@/lib/validations/unifiedServiceSchema';
 import { useToast } from '@/hooks/use-toast';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 
 interface UnifiedServiceFormProps {
   serviceName: string;
@@ -18,6 +27,7 @@ export const UnifiedServiceForm = ({ serviceName }: UnifiedServiceFormProps) => 
   const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState<'form' | 'whatsapp' | 'success'>('form');
   const [formData, setFormData] = useState<UnifiedServiceFormData | null>(null);
+  const [showThankYou, setShowThankYou] = useState(false);
 
   const {
     register,
@@ -50,18 +60,44 @@ Please process this request at your earliest convenience.`;
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
     setCurrentStep('success');
+    
+    // Show thank you dialog after a brief delay
+    setTimeout(() => {
+      setShowThankYou(true);
+    }, 500);
   };
 
   if (currentStep === 'success') {
     return (
-      <div className="flex flex-col items-center justify-center space-y-4 py-8">
-        <div className="rounded-full bg-green-100 p-4">
-          <CheckCircle className="h-12 w-12 text-green-600" />
+      <>
+        <div className="flex flex-col items-center justify-center space-y-4 py-8">
+          <div className="rounded-full bg-green-100 p-4">
+            <CheckCircle className="h-12 w-12 text-green-600" />
+          </div>
+          <p className="text-center text-lg font-medium text-foreground">
+            {t('requestSubmittedSuccess')}
+          </p>
         </div>
-        <p className="text-center text-lg font-medium text-foreground">
-          {t('requestSubmittedSuccess')}
-        </p>
-      </div>
+
+        {/* Thank You Dialog */}
+        <AlertDialog open={showThankYou} onOpenChange={setShowThankYou}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle className="text-center text-2xl">
+                {t('thankYouTitle')}
+              </AlertDialogTitle>
+              <AlertDialogDescription className="text-center text-lg pt-4">
+                {t('thankYouMessage')}
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogAction onClick={() => setShowThankYou(false)} className="w-full">
+                {t('closeButton')}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </>
     );
   }
 

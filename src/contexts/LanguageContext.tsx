@@ -52,6 +52,9 @@ const translations = {
     requestDate: 'Request Date',
     printReceipt: 'Print Receipt',
     scanIdInstruction: 'Please place your National ID card on the scanner before clicking the button below',
+    thankYouTitle: 'Thank You!',
+    thankYouMessage: 'Thank you for choosing Raya BranchXperience 4.0',
+    closeButton: 'Close',
     
     // Unified Service Form
     fullName: 'Full Name',
@@ -124,6 +127,9 @@ const translations = {
     requestDate: 'تاريخ الطلب',
     printReceipt: 'طباعة الإيصال',
     scanIdInstruction: 'يرجى وضع بطاقة الرقم القومي الخاصة بك على الماسح الضوئي قبل الضغط على الزر أدناه',
+    thankYouTitle: 'شكراً لك!',
+    thankYouMessage: 'شكراً لاختيارك Raya BranchXperience 4.0',
+    closeButton: 'إغلاق',
     
     // Unified Service Form
     fullName: 'الاسم الكامل',
