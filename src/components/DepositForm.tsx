@@ -64,11 +64,6 @@ export const DepositForm = ({ onClose }: DepositFormProps = {}) => {
     setIsSubmitting(false);
     setIsSuccess(true);
     
-    // Show thank you dialog after a brief delay
-    setTimeout(() => {
-      setShowThankYou(true);
-    }, 500);
-    
     toast({
       title: t('submitRequest'),
       description: t('depositSuccess'),
@@ -78,6 +73,11 @@ export const DepositForm = ({ onClose }: DepositFormProps = {}) => {
 
   const handlePrint = () => {
     window.print();
+    
+    // Show thank you dialog after a brief delay
+    setTimeout(() => {
+      setShowThankYou(true);
+    }, 500);
   };
 
   const handleWhatsAppShare = () => {
@@ -97,6 +97,11 @@ ${t('depositSuccess')}
     const whatsappUrl = `https://wa.me/?text=${encodedMessage}`;
     
     window.open(whatsappUrl, '_blank');
+    
+    // Show thank you dialog after a brief delay
+    setTimeout(() => {
+      setShowThankYou(true);
+    }, 500);
   };
 
   if (isSuccess && submittedData) {
