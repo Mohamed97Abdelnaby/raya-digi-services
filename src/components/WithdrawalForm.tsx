@@ -64,11 +64,6 @@ export const WithdrawalForm = ({ onClose }: WithdrawalFormProps = {}) => {
     setIsSubmitting(false);
     setIsSuccess(true);
     
-    // Show thank you dialog after a brief delay
-    setTimeout(() => {
-      setShowThankYou(true);
-    }, 500);
-    
     toast({
       title: t('submitRequest'),
       description: t('withdrawalSuccess'),
@@ -78,6 +73,11 @@ export const WithdrawalForm = ({ onClose }: WithdrawalFormProps = {}) => {
 
   const handlePrint = () => {
     window.print();
+    
+    // Show thank you dialog after a brief delay
+    setTimeout(() => {
+      setShowThankYou(true);
+    }, 500);
   };
 
   const handleWhatsAppShare = () => {
@@ -97,6 +97,11 @@ ${t('withdrawalSuccess')}
     const whatsappUrl = `https://wa.me/?text=${encodedMessage}`;
     
     window.open(whatsappUrl, '_blank');
+    
+    // Show thank you dialog after a brief delay
+    setTimeout(() => {
+      setShowThankYou(true);
+    }, 500);
   };
 
   if (isSuccess && submittedData) {
@@ -169,6 +174,25 @@ ${t('withdrawalSuccess')}
             {t('exitButton')}
           </Button>
         )}
+
+        {/* Thank You Dialog */}
+        <AlertDialog open={showThankYou} onOpenChange={setShowThankYou}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle className="text-center text-2xl">
+                {t('thankYouTitle')}
+              </AlertDialogTitle>
+              <AlertDialogDescription className="text-center text-lg pt-4">
+                {t('thankYouMessage')}
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogAction onClick={() => setShowThankYou(false)} className="w-full">
+                {t('closeButton')}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     );
   }
@@ -264,25 +288,6 @@ ${t('withdrawalSuccess')}
           t('submitRequest')
         )}
       </Button>
-
-      {/* Thank You Dialog */}
-      <AlertDialog open={showThankYou} onOpenChange={setShowThankYou}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle className="text-center text-2xl">
-              {t('thankYouTitle')}
-            </AlertDialogTitle>
-            <AlertDialogDescription className="text-center text-lg pt-4">
-              {t('thankYouMessage')}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogAction onClick={() => setShowThankYou(false)} className="w-full">
-              {t('closeButton')}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </form>
   );
 };
