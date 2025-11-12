@@ -30,9 +30,10 @@ interface DepositFormProps {
   onClose?: () => void;
   stateKey?: string | null;
   onStateKeyUpdate?: (newStateKey: string) => void;
+  onFormSubmitted?: () => void;
 }
 
-export const DepositForm = ({ onClose, stateKey, onStateKeyUpdate }: DepositFormProps = {}) => {
+export const DepositForm = ({ onClose, stateKey, onStateKeyUpdate, onFormSubmitted }: DepositFormProps = {}) => {
   const { t } = useLanguage();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -88,6 +89,11 @@ export const DepositForm = ({ onClose, stateKey, onStateKeyUpdate }: DepositForm
         
         if (responseData.stateKey && onStateKeyUpdate) {
           onStateKeyUpdate(responseData.stateKey);
+        }
+        
+        // Notify ServiceModal that form was submitted
+        if (onFormSubmitted) {
+          onFormSubmitted();
         }
         
         setSubmittedData(data);

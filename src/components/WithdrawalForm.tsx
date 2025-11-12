@@ -30,9 +30,10 @@ interface WithdrawalFormProps {
   onClose?: () => void;
   stateKey?: string | null;
   onStateKeyUpdate?: (newStateKey: string) => void;
+  onFormSubmitted?: () => void;
 }
 
-export const WithdrawalForm = ({ onClose, stateKey, onStateKeyUpdate }: WithdrawalFormProps = {}) => {
+export const WithdrawalForm = ({ onClose, stateKey, onStateKeyUpdate, onFormSubmitted }: WithdrawalFormProps = {}) => {
   const { t } = useLanguage();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -88,6 +89,11 @@ export const WithdrawalForm = ({ onClose, stateKey, onStateKeyUpdate }: Withdraw
         
         if (responseData.stateKey && onStateKeyUpdate) {
           onStateKeyUpdate(responseData.stateKey);
+        }
+        
+        // Notify ServiceModal that form was submitted
+        if (onFormSubmitted) {
+          onFormSubmitted();
         }
         
         setSubmittedData(data);

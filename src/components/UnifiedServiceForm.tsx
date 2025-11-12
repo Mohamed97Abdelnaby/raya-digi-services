@@ -29,6 +29,7 @@ interface UnifiedServiceFormProps {
   onClose?: () => void;
   stateKey?: string | null;
   onStateKeyUpdate?: (newStateKey: string) => void;
+  onFormSubmitted?: () => void;
 }
 
 const getInTicketType = (serviceType?: string): string | null => {
@@ -52,7 +53,8 @@ export const UnifiedServiceForm = ({
   showWhatsAppOnly = false,
   onClose,
   stateKey,
-  onStateKeyUpdate
+  onStateKeyUpdate,
+  onFormSubmitted
 }: UnifiedServiceFormProps) => {
   const { t } = useLanguage();
   const { toast } = useToast();
@@ -109,13 +111,18 @@ export const UnifiedServiceForm = ({
           console.log('Initiate Response:', responseData);
           
           // Save stateKey for future API requests
-          if (responseData.stateKey && onStateKeyUpdate) {
-            onStateKeyUpdate(responseData.stateKey);
-          }
-          
-          // Move to success page
-          setFormData(data);
-          setCurrentStep('success');
+        if (responseData.stateKey && onStateKeyUpdate) {
+          onStateKeyUpdate(responseData.stateKey);
+        }
+        
+        // Notify ServiceModal that form was submitted
+        if (onFormSubmitted) {
+          onFormSubmitted();
+        }
+        
+        // Move to success page
+        setFormData(data);
+        setCurrentStep('success');
           
           toast({
             title: "Successful",
@@ -168,12 +175,17 @@ export const UnifiedServiceForm = ({
           const responseData = await response.json();
           console.log('Confirm Response:', responseData);
           
-          if (responseData.stateKey && onStateKeyUpdate) {
-            onStateKeyUpdate(responseData.stateKey);
-          }
-          
-          setFormData(data);
-          setCurrentStep('success');
+        if (responseData.stateKey && onStateKeyUpdate) {
+          onStateKeyUpdate(responseData.stateKey);
+        }
+        
+        // Notify ServiceModal that form was submitted (KYC only)
+        if (onFormSubmitted) {
+          onFormSubmitted();
+        }
+        
+        setFormData(data);
+        setCurrentStep('success');
           
           toast({
             title: "Successful",
