@@ -21,6 +21,7 @@ import {
 
 interface UnifiedServiceFormProps {
   serviceName: string;
+  serviceType?: string;
   showScanButton?: boolean;
   showExitButton?: boolean;
   showPrintWhatsApp?: boolean;
@@ -30,8 +31,21 @@ interface UnifiedServiceFormProps {
   onStateKeyUpdate?: (newStateKey: string) => void;
 }
 
+const getInTicketType = (serviceType?: string): string | null => {
+  const ticketTypeMap: Record<string, string> = {
+    'foreign': 'ForeignCurrencyWithdrawal',
+    'exchange': 'MoneyExchange',
+    'statement': 'StatementPrinting',
+    'chequebook': 'ChequeBookRequest',
+    'mobile': 'MobilePrestaging',
+    'chequeencashment': 'ChequeEncashment'
+  };
+  return serviceType ? (ticketTypeMap[serviceType] || null) : null;
+};
+
 export const UnifiedServiceForm = ({ 
-  serviceName, 
+  serviceName,
+  serviceType,
   showScanButton = false,
   showExitButton = false,
   showPrintWhatsApp = false,
@@ -59,61 +73,132 @@ export const UnifiedServiceForm = ({
   });
 
   const onSubmit = async (data: UnifiedServiceFormData) => {
-    if (!stateKey) {
-      toast({
-        title: 'Error',
-        description: 'Session state not found. Please close and reopen the form.',
-        variant: 'destructive',
-        duration: 3000,
-      });
-      return;
-    }
-
-    try {
-      const response = await fetch(
-        `https://domain:port/api/Ticket/UpdateKYC/${stateKey}/confirm`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+    // For WhatsApp-only services (the 6 services), call initiate API
+    if (showWhatsAppOnly) {
+      const ticketType = getInTicketType(serviceType);
       
-      if (response.ok && response.status === 200) {
-        const responseData = await response.json();
-        console.log('Confirm Response:', responseData);
-        
-        if (responseData.stateKey && onStateKeyUpdate) {
-          onStateKeyUpdate(responseData.stateKey);
-        }
-        
-        setFormData(data);
-        setCurrentStep('success');
-        
+      if (!ticketType) {
         toast({
-          title: "Successful",
-          description: responseData.message || "Your information has been confirmed.",
+          title: 'Error',
+          description: 'Invalid service type.',
+          variant: 'destructive',
+          duration: 3000,
         });
-      } else {
-        const errorData = await response.json().catch(() => ({}));
+        return;
+      }
+      
+      try {
+        const requestBody = {
+          fullName: data.fullName,
+          phoneNumber: data.mobileNumber
+        };
+        
+        const response = await fetch(
+          `https://domain:port/api/InTicket/${ticketType}/initiate`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestBody),
+          }
+        );
+        
+        if (response.ok && response.status === 200) {
+          const responseData = await response.json();
+          console.log('Initiate Response:', responseData);
+          
+          // Save stateKey for future API requests
+          if (responseData.stateKey && onStateKeyUpdate) {
+            onStateKeyUpdate(responseData.stateKey);
+          }
+          
+          // Move to success page
+          setFormData(data);
+          setCurrentStep('success');
+          
+          toast({
+            title: "Successful",
+            description: responseData.message || "Your request has been initiated.",
+          });
+        } else {
+          const errorData = await response.json().catch(() => ({}));
+          
+          toast({
+            title: 'Initiation Failed',
+            description: errorData.message || 'Failed to initiate request. Please try again.',
+            variant: 'destructive',
+            duration: 5000,
+          });
+        }
+      } catch (error) {
+        console.error('Initiate API Error:', error);
         
         toast({
-          title: 'Confirmation Failed',
-          description: errorData.message || 'Failed to confirm request. Please try again.',
+          title: 'Connection Error',
+          description: 'Unable to connect to the service. Please check your connection.',
           variant: 'destructive',
           duration: 5000,
         });
       }
-    } catch (error) {
-      console.error('Confirm API Error:', error);
-      
-      toast({
-        title: 'Connection Error',
-        description: 'Unable to connect to the service. Please check your connection.',
-        variant: 'destructive',
-        duration: 5000,
-      });
+    } else {
+      // Existing KYC logic (confirm API)
+      if (!stateKey) {
+        toast({
+          title: 'Error',
+          description: 'Session state not found. Please close and reopen the form.',
+          variant: 'destructive',
+          duration: 3000,
+        });
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          `https://domain:port/api/Ticket/UpdateKYC/${stateKey}/confirm`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+        
+        if (response.ok && response.status === 200) {
+          const responseData = await response.json();
+          console.log('Confirm Response:', responseData);
+          
+          if (responseData.stateKey && onStateKeyUpdate) {
+            onStateKeyUpdate(responseData.stateKey);
+          }
+          
+          setFormData(data);
+          setCurrentStep('success');
+          
+          toast({
+            title: "Successful",
+            description: responseData.message || "Your information has been confirmed.",
+          });
+        } else {
+          const errorData = await response.json().catch(() => ({}));
+          
+          toast({
+            title: 'Confirmation Failed',
+            description: errorData.message || 'Failed to confirm request. Please try again.',
+            variant: 'destructive',
+            duration: 5000,
+          });
+        }
+      } catch (error) {
+        console.error('Confirm API Error:', error);
+        
+        toast({
+          title: 'Connection Error',
+          description: 'Unable to connect to the service. Please check your connection.',
+          variant: 'destructive',
+          duration: 5000,
+        });
+      }
     }
   };
 
@@ -248,15 +333,33 @@ export const UnifiedServiceForm = ({
     if (!formData || !stateKey) return;
 
     try {
-      const response = await fetch(
-        `https://domain:port/api/Ticket/UpdateKYC/${stateKey}/send-WhatsApp`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+      let apiEndpoint = '';
+      
+      if (showWhatsAppOnly) {
+        const ticketType = getInTicketType(serviceType);
+        
+        if (!ticketType) {
+          toast({
+            title: 'Error',
+            description: 'Invalid service type.',
+            variant: 'destructive',
+            duration: 3000,
+          });
+          return;
         }
-      );
+        
+        apiEndpoint = `https://domain:port/api/InTicket/${ticketType}/${stateKey}/send-msg-whatsapp`;
+      } else {
+        // KYC service
+        apiEndpoint = `https://domain:port/api/Ticket/UpdateKYC/${stateKey}/send-WhatsApp`;
+      }
+      
+      const response = await fetch(apiEndpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
       
       if (response.ok && response.status === 200) {
         const data = await response.json();
@@ -307,15 +410,29 @@ ${t('kycSuccess')}`;
     if (!stateKey || !onClose) return;
     
     try {
-      const response = await fetch(
-        `https://domain:port/api/Ticket/UpdateKYC/${stateKey}/close-ticket`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+      let apiEndpoint = '';
+      
+      if (showWhatsAppOnly) {
+        const ticketType = getInTicketType(serviceType);
+        
+        if (!ticketType) {
+          // If we can't determine ticket type, just close without API call
+          onClose();
+          return;
         }
-      );
+        
+        apiEndpoint = `https://domain:port/api/InTicket/${ticketType}/${stateKey}/close-ticket`;
+      } else {
+        // KYC service
+        apiEndpoint = `https://domain:port/api/Ticket/UpdateKYC/${stateKey}/close-ticket`;
+      }
+      
+      const response = await fetch(apiEndpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
       
       if (response.ok && response.status === 200) {
         const data = await response.json();

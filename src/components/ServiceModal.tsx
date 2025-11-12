@@ -84,7 +84,8 @@ export const ServiceModal = ({
               
               return (
                 <UnifiedServiceForm 
-                  serviceName={title} 
+                  serviceName={title}
+                  serviceType={serviceType}
                   showScanButton={isKYC}
                   showExitButton={isKYC || hasWhatsAppOnly}
                   showPrintWhatsApp={isKYC}
