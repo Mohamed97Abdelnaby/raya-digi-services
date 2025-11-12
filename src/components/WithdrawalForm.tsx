@@ -29,15 +29,18 @@ import {
 interface WithdrawalFormProps {
   onClose?: () => void;
   stateKey?: string | null;
+  onStateKeyUpdate?: (newStateKey: string) => void;
 }
 
-export const WithdrawalForm = ({ onClose, stateKey }: WithdrawalFormProps = {}) => {
+export const WithdrawalForm = ({ onClose, stateKey, onStateKeyUpdate }: WithdrawalFormProps = {}) => {
   const { t } = useLanguage();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [submittedData, setSubmittedData] = useState<WithdrawalFormData | null>(null);
   const [showThankYou, setShowThankYou] = useState(false);
+  const [isScanningId, setIsScanningId] = useState(false);
+  const [isScanSuccessful, setIsScanSuccessful] = useState(false);
 
   const {
     register,
@@ -73,39 +76,79 @@ export const WithdrawalForm = ({ onClose, stateKey }: WithdrawalFormProps = {}) 
   };
 
   const handleScanNationalId = async () => {
+    if (!stateKey) {
+      toast({
+        title: 'Error',
+        description: 'Session state not found. Please close and reopen the form.',
+        variant: 'destructive',
+        duration: 3000,
+      });
+      return;
+    }
+
+    setIsScanningId(true);
+    setIsScanSuccessful(false);
+    
     const currentValues = watch();
     
     const requestBody = {
-      Deposit_amount: currentValues.amount,
-      Phone_number: currentValues.phoneNumber,
+      phoneNumber: currentValues.phoneNumber,
+      amount: currentValues.amount,
       currency: currentValues.currency
     };
     
     try {
-      const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(requestBody),
-      });
+      const response = await fetch(
+        `https://domain:port/api/Ticket/WithdrawalAboveLimit/${stateKey}/scan-id`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestBody),
+        }
+      );
       
-      const data = await response.json();
-      console.log('Scan National ID Response:', data);
-      
-      toast({
-        title: t('scanSuccess'),
-        description: 'National ID scanned successfully',
-        duration: 3000,
-      });
+      if (response.ok && response.status === 200) {
+        const data = await response.json();
+        console.log('Scan National ID Response:', data);
+        
+        if (data.stateKey && onStateKeyUpdate) {
+          onStateKeyUpdate(data.stateKey);
+        }
+        
+        setIsScanSuccessful(true);
+        
+        toast({
+          title: t('scanSuccess'),
+          description: data.message || 'National ID scanned successfully',
+          duration: 3000,
+        });
+      } else {
+        setIsScanSuccessful(false);
+        
+        const errorData = await response.json().catch(() => ({}));
+        
+        toast({
+          title: 'Scan Failed',
+          description: errorData.message || 'Failed to scan National ID. Please try again.',
+          variant: 'destructive',
+          duration: 5000,
+        });
+      }
     } catch (error) {
       console.error('Scan National ID Error:', error);
+      
+      setIsScanSuccessful(false);
+      
       toast({
-        title: 'Error',
-        description: 'Failed to scan National ID',
+        title: 'Connection Error',
+        description: 'Unable to connect to the scanning service. Please check your connection.',
         variant: 'destructive',
-        duration: 3000,
+        duration: 5000,
       });
+    } finally {
+      setIsScanningId(false);
     }
   };
 
@@ -305,18 +348,27 @@ ${t('withdrawalSuccess')}
         type="button"
         variant="outline"
         className="w-full"
-        disabled={!isValid}
+        disabled={!isValid || isScanningId}
         onClick={handleScanNationalId}
       >
-        <Camera className="mr-2 h-4 w-4" />
-        {t('scanNationalId')}
+        {isScanningId ? (
+          <>
+            <span className="h-4 w-4 mr-2 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+            {t('scanningId')}
+          </>
+        ) : (
+          <>
+            <Camera className="mr-2 h-4 w-4" />
+            {t('scanNationalId')}
+          </>
+        )}
       </Button>
 
       {/* Submit Button */}
       <Button
         type="submit"
         className="w-full"
-        disabled={isSubmitting || !isValid}
+        disabled={isSubmitting || !isValid || !isScanSuccessful}
       >
         {isSubmitting ? (
           <span className="flex items-center gap-2">

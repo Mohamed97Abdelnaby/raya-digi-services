@@ -58,6 +58,7 @@ const translations = {
     exitButton: 'Exit',
     initiatingService: 'Initiating Service...',
     scanSuccess: 'Scan Successful',
+    scanningId: 'Scanning ID...',
     
     // Unified Service Form
     fullName: 'Full Name',
@@ -142,6 +143,7 @@ const translations = {
     exitButton: 'خروج',
     initiatingService: 'جاري تهيئة الخدمة...',
     scanSuccess: 'تم المسح بنجاح',
+    scanningId: 'جاري مسح الهوية...',
     
     // Unified Service Form
     fullName: 'الاسم الكامل',

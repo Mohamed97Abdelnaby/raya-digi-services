@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -35,6 +36,17 @@ export const ServiceModal = ({
   stateKey,
 }: ServiceModalProps) => {
   const { t } = useLanguage();
+  const [currentStateKey, setCurrentStateKey] = useState<string | null>(stateKey || null);
+  
+  useEffect(() => {
+    setCurrentStateKey(stateKey || null);
+  }, [stateKey]);
+
+  const handleStateKeyUpdate = (newStateKey: string) => {
+    setCurrentStateKey(newStateKey);
+    console.log('StateKey updated:', newStateKey);
+  };
+  
   const isWithdrawal = serviceType === 'withdrawal';
   const isDeposit = serviceType === 'deposit';
   const isUnifiedForm = serviceType === 'kyc' || serviceType === 'foreign' || 
@@ -62,9 +74,9 @@ export const ServiceModal = ({
         </DialogHeader>
         <div className="mt-4">
           {isWithdrawal ? (
-            <WithdrawalForm onClose={onClose} stateKey={stateKey} />
+            <WithdrawalForm onClose={onClose} stateKey={currentStateKey} onStateKeyUpdate={handleStateKeyUpdate} />
           ) : isDeposit ? (
-            <DepositForm onClose={onClose} stateKey={stateKey} />
+            <DepositForm onClose={onClose} stateKey={currentStateKey} onStateKeyUpdate={handleStateKeyUpdate} />
           ) : isUnifiedForm ? (
             (() => {
               const isKYC = serviceType === 'kyc';
@@ -78,7 +90,8 @@ export const ServiceModal = ({
                   showPrintWhatsApp={isKYC}
                   showWhatsAppOnly={hasWhatsAppOnly}
                   onClose={onClose}
-                  stateKey={stateKey}
+                  stateKey={currentStateKey}
+                  onStateKeyUpdate={handleStateKeyUpdate}
                 />
               );
             })()
