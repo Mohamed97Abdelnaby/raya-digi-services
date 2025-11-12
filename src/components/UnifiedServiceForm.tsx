@@ -58,13 +58,63 @@ export const UnifiedServiceForm = ({
     mode: 'onChange',
   });
 
-  const onSubmit = (data: UnifiedServiceFormData) => {
-    setFormData(data);
-    toast({
-      title: "Successful",
-      description: "Your information has been confirmed.",
-    });
-    setCurrentStep('success');
+  const onSubmit = async (data: UnifiedServiceFormData) => {
+    if (!stateKey) {
+      toast({
+        title: 'Error',
+        description: 'Session state not found. Please close and reopen the form.',
+        variant: 'destructive',
+        duration: 3000,
+      });
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `https://domain:port/api/Ticket/UpdateKYC/${stateKey}/confirm`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      
+      if (response.ok && response.status === 200) {
+        const responseData = await response.json();
+        console.log('Confirm Response:', responseData);
+        
+        if (responseData.stateKey && onStateKeyUpdate) {
+          onStateKeyUpdate(responseData.stateKey);
+        }
+        
+        setFormData(data);
+        setCurrentStep('success');
+        
+        toast({
+          title: "Successful",
+          description: responseData.message || "Your information has been confirmed.",
+        });
+      } else {
+        const errorData = await response.json().catch(() => ({}));
+        
+        toast({
+          title: 'Confirmation Failed',
+          description: errorData.message || 'Failed to confirm request. Please try again.',
+          variant: 'destructive',
+          duration: 5000,
+        });
+      }
+    } catch (error) {
+      console.error('Confirm API Error:', error);
+      
+      toast({
+        title: 'Connection Error',
+        description: 'Unable to connect to the service. Please check your connection.',
+        variant: 'destructive',
+        duration: 5000,
+      });
+    }
   };
 
   const handleScanNationalId = async () => {
@@ -144,19 +194,80 @@ export const UnifiedServiceForm = ({
     }
   };
 
-  const handlePrint = () => {
-    window.print();
+  const handlePrint = async () => {
+    if (!stateKey) return;
     
-    // Show thank you dialog after a brief delay
-    setTimeout(() => {
-      setShowThankYou(true);
-    }, 500);
+    try {
+      const response = await fetch(
+        `https://domain:port/api/Ticket/UpdateKYC/${stateKey}/print`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      
+      if (response.ok && response.status === 200) {
+        const data = await response.json();
+        
+        toast({
+          title: 'Success',
+          description: data.message || 'Print request recorded successfully',
+          duration: 3000,
+        });
+        
+        window.print();
+        
+        setTimeout(() => {
+          setShowThankYou(true);
+        }, 500);
+      } else {
+        const errorData = await response.json().catch(() => ({}));
+        
+        toast({
+          title: 'Print Error',
+          description: errorData.message || 'Failed to process print request.',
+          variant: 'destructive',
+          duration: 5000,
+        });
+      }
+    } catch (error) {
+      console.error('Print API Error:', error);
+      
+      toast({
+        title: 'Connection Error',
+        description: 'Unable to connect to the service.',
+        variant: 'destructive',
+        duration: 5000,
+      });
+    }
   };
 
-  const handleWhatsAppShare = () => {
-    if (!formData) return;
+  const handleWhatsAppShare = async () => {
+    if (!formData || !stateKey) return;
 
-    const message = `*${serviceName} ${t('serviceRequest')}*
+    try {
+      const response = await fetch(
+        `https://domain:port/api/Ticket/UpdateKYC/${stateKey}/send-WhatsApp`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      
+      if (response.ok && response.status === 200) {
+        const data = await response.json();
+        
+        toast({
+          title: 'Success',
+          description: data.message || 'WhatsApp notification sent successfully',
+          duration: 3000,
+        });
+        
+        const message = `*${serviceName} ${t('serviceRequest')}*
 
 ${t('fullName')}: ${formData.fullName}
 ${t('mobileNumber')}: ${formData.mobileNumber}
@@ -164,13 +275,78 @@ ${t('requestDate')}: ${new Date().toLocaleDateString()}
 
 ${t('kycSuccess')}`;
 
-    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
+        const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+        window.open(whatsappUrl, '_blank');
+        
+        setTimeout(() => {
+          setShowThankYou(true);
+        }, 500);
+      } else {
+        const errorData = await response.json().catch(() => ({}));
+        
+        toast({
+          title: 'WhatsApp Error',
+          description: errorData.message || 'Failed to send WhatsApp notification.',
+          variant: 'destructive',
+          duration: 5000,
+        });
+      }
+    } catch (error) {
+      console.error('WhatsApp API Error:', error);
+      
+      toast({
+        title: 'Connection Error',
+        description: 'Unable to connect to the service.',
+        variant: 'destructive',
+        duration: 5000,
+      });
+    }
+  };
+
+  const handleClose = async () => {
+    if (!stateKey || !onClose) return;
     
-    // Show thank you dialog after a brief delay
-    setTimeout(() => {
-      setShowThankYou(true);
-    }, 500);
+    try {
+      const response = await fetch(
+        `https://domain:port/api/Ticket/UpdateKYC/${stateKey}/close-ticket`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      
+      if (response.ok && response.status === 200) {
+        const data = await response.json();
+        
+        toast({
+          title: 'Success',
+          description: data.message || 'Ticket closed successfully',
+          duration: 3000,
+        });
+        
+        onClose();
+      } else {
+        const errorData = await response.json().catch(() => ({}));
+        
+        toast({
+          title: 'Close Error',
+          description: errorData.message || 'Failed to close ticket.',
+          variant: 'destructive',
+          duration: 5000,
+        });
+      }
+    } catch (error) {
+      console.error('Close Ticket API Error:', error);
+      
+      toast({
+        title: 'Connection Error',
+        description: 'Unable to connect to the service.',
+        variant: 'destructive',
+        duration: 5000,
+      });
+    }
   };
 
   if (currentStep === 'success') {
@@ -252,7 +428,7 @@ ${t('kycSuccess')}`;
         {/* Exit Button */}
         {showExitButton && onClose && (
           <Button
-            onClick={onClose}
+            onClick={handleClose}
             variant="outline"
             className="w-full mt-4"
           >

@@ -59,20 +59,67 @@ export const DepositForm = ({ onClose, stateKey, onStateKeyUpdate }: DepositForm
   const currency = watch('currency');
 
   const onSubmit = async (data: DepositFormData) => {
+    if (!stateKey) {
+      toast({
+        title: 'Error',
+        description: 'Session state not found. Please close and reopen the form.',
+        variant: 'destructive',
+        duration: 3000,
+      });
+      return;
+    }
+
     setIsSubmitting(true);
     
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    
-    setSubmittedData(data);
-    setIsSubmitting(false);
-    setIsSuccess(true);
-    
-    toast({
-      title: t('submitRequest'),
-      description: t('depositSuccess'),
-      duration: 5000,
-    });
+    try {
+      const response = await fetch(
+        `https://domain:port/api/Ticket/DepositAboveLimit/${stateKey}/confirm`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      
+      if (response.ok && response.status === 200) {
+        const responseData = await response.json();
+        console.log('Confirm Response:', responseData);
+        
+        if (responseData.stateKey && onStateKeyUpdate) {
+          onStateKeyUpdate(responseData.stateKey);
+        }
+        
+        setSubmittedData(data);
+        setIsSuccess(true);
+        
+        toast({
+          title: t('submitRequest'),
+          description: responseData.message || t('depositSuccess'),
+          duration: 5000,
+        });
+      } else {
+        const errorData = await response.json().catch(() => ({}));
+        
+        toast({
+          title: 'Confirmation Failed',
+          description: errorData.message || 'Failed to confirm request. Please try again.',
+          variant: 'destructive',
+          duration: 5000,
+        });
+      }
+    } catch (error) {
+      console.error('Confirm API Error:', error);
+      
+      toast({
+        title: 'Connection Error',
+        description: 'Unable to connect to the service. Please check your connection.',
+        variant: 'destructive',
+        duration: 5000,
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleScanNationalId = async () => {
@@ -152,19 +199,80 @@ export const DepositForm = ({ onClose, stateKey, onStateKeyUpdate }: DepositForm
     }
   };
 
-  const handlePrint = () => {
-    window.print();
+  const handlePrint = async () => {
+    if (!stateKey) return;
     
-    // Show thank you dialog after a brief delay
-    setTimeout(() => {
-      setShowThankYou(true);
-    }, 500);
+    try {
+      const response = await fetch(
+        `https://domain:port/api/Ticket/DepositAboveLimit/${stateKey}/print`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      
+      if (response.ok && response.status === 200) {
+        const data = await response.json();
+        
+        toast({
+          title: 'Success',
+          description: data.message || 'Print request recorded successfully',
+          duration: 3000,
+        });
+        
+        window.print();
+        
+        setTimeout(() => {
+          setShowThankYou(true);
+        }, 500);
+      } else {
+        const errorData = await response.json().catch(() => ({}));
+        
+        toast({
+          title: 'Print Error',
+          description: errorData.message || 'Failed to process print request.',
+          variant: 'destructive',
+          duration: 5000,
+        });
+      }
+    } catch (error) {
+      console.error('Print API Error:', error);
+      
+      toast({
+        title: 'Connection Error',
+        description: 'Unable to connect to the service.',
+        variant: 'destructive',
+        duration: 5000,
+      });
+    }
   };
 
-  const handleWhatsAppShare = () => {
-    if (!submittedData) return;
+  const handleWhatsAppShare = async () => {
+    if (!submittedData || !stateKey) return;
     
-    const message = `
+    try {
+      const response = await fetch(
+        `https://domain:port/api/Ticket/DepositAboveLimit/${stateKey}/send-WhatsApp`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      
+      if (response.ok && response.status === 200) {
+        const data = await response.json();
+        
+        toast({
+          title: 'Success',
+          description: data.message || 'WhatsApp notification sent successfully',
+          duration: 3000,
+        });
+        
+        const message = `
 *${t('depositReceipt')}*
 
 ${t('depositAmount')}: ${submittedData.amount} ${submittedData.currency}
@@ -172,17 +280,81 @@ ${t('phoneNumber')}: ${submittedData.phoneNumber}
 ${t('requestDate')}: ${new Date().toLocaleDateString()}
 
 ${t('depositSuccess')}
-    `.trim();
+        `.trim();
+        
+        const encodedMessage = encodeURIComponent(message);
+        const whatsappUrl = `https://wa.me/?text=${encodedMessage}`;
+        window.open(whatsappUrl, '_blank');
+        
+        setTimeout(() => {
+          setShowThankYou(true);
+        }, 500);
+      } else {
+        const errorData = await response.json().catch(() => ({}));
+        
+        toast({
+          title: 'WhatsApp Error',
+          description: errorData.message || 'Failed to send WhatsApp notification.',
+          variant: 'destructive',
+          duration: 5000,
+        });
+      }
+    } catch (error) {
+      console.error('WhatsApp API Error:', error);
+      
+      toast({
+        title: 'Connection Error',
+        description: 'Unable to connect to the service.',
+        variant: 'destructive',
+        duration: 5000,
+      });
+    }
+  };
+
+  const handleClose = async () => {
+    if (!stateKey || !onClose) return;
     
-    const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/?text=${encodedMessage}`;
-    
-    window.open(whatsappUrl, '_blank');
-    
-    // Show thank you dialog after a brief delay
-    setTimeout(() => {
-      setShowThankYou(true);
-    }, 500);
+    try {
+      const response = await fetch(
+        `https://domain:port/api/Ticket/DepositAboveLimit/${stateKey}/close-ticket`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      
+      if (response.ok && response.status === 200) {
+        const data = await response.json();
+        
+        toast({
+          title: 'Success',
+          description: data.message || 'Ticket closed successfully',
+          duration: 3000,
+        });
+        
+        onClose();
+      } else {
+        const errorData = await response.json().catch(() => ({}));
+        
+        toast({
+          title: 'Close Error',
+          description: errorData.message || 'Failed to close ticket.',
+          variant: 'destructive',
+          duration: 5000,
+        });
+      }
+    } catch (error) {
+      console.error('Close Ticket API Error:', error);
+      
+      toast({
+        title: 'Connection Error',
+        description: 'Unable to connect to the service.',
+        variant: 'destructive',
+        duration: 5000,
+      });
+    }
   };
 
   if (isSuccess && submittedData) {
@@ -247,7 +419,7 @@ ${t('depositSuccess')}
         {/* Exit Button */}
         {onClose && (
           <Button
-            onClick={onClose}
+            onClick={handleClose}
             variant="outline"
             className="w-full mt-4"
           >
