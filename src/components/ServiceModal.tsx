@@ -21,6 +21,7 @@ interface ServiceModalProps {
   title: string;
   description: string;
   details: string;
+  stateKey?: string | null;
 }
 
 export const ServiceModal = ({
@@ -31,6 +32,7 @@ export const ServiceModal = ({
   title,
   description,
   details,
+  stateKey,
 }: ServiceModalProps) => {
   const { t } = useLanguage();
   const isWithdrawal = serviceType === 'withdrawal';
@@ -60,9 +62,9 @@ export const ServiceModal = ({
         </DialogHeader>
         <div className="mt-4">
           {isWithdrawal ? (
-            <WithdrawalForm onClose={onClose} />
+            <WithdrawalForm onClose={onClose} stateKey={stateKey} />
           ) : isDeposit ? (
-            <DepositForm onClose={onClose} />
+            <DepositForm onClose={onClose} stateKey={stateKey} />
           ) : isUnifiedForm ? (
             (() => {
               const isKYC = serviceType === 'kyc';
@@ -76,6 +78,7 @@ export const ServiceModal = ({
                   showPrintWhatsApp={isKYC}
                   showWhatsAppOnly={hasWhatsAppOnly}
                   onClose={onClose}
+                  stateKey={stateKey}
                 />
               );
             })()

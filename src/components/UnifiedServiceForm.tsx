@@ -26,6 +26,7 @@ interface UnifiedServiceFormProps {
   showPrintWhatsApp?: boolean;
   showWhatsAppOnly?: boolean;
   onClose?: () => void;
+  stateKey?: string | null;
 }
 
 export const UnifiedServiceForm = ({ 
@@ -34,7 +35,8 @@ export const UnifiedServiceForm = ({
   showExitButton = false,
   showPrintWhatsApp = false,
   showWhatsAppOnly = false,
-  onClose 
+  onClose,
+  stateKey 
 }: UnifiedServiceFormProps) => {
   const { t } = useLanguage();
   const { toast } = useToast();

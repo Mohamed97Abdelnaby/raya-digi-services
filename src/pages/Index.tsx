@@ -4,6 +4,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { LanguageToggle } from '@/components/LanguageToggle';
 import { ServiceCard } from '@/components/ServiceCard';
 import { ServiceModal } from '@/components/ServiceModal';
+import { toast } from '@/hooks/use-toast';
 import rayaLogo from '@/assets/raya-logo-new.png';
 
 type ServiceType = 'withdrawal' | 'kyc' | 'foreign' | 'exchange' | 'deposit' | 'statement' | 'chequebook' | 'mobile' | 'chequeencashment' | null;
@@ -11,6 +12,69 @@ type ServiceType = 'withdrawal' | 'kyc' | 'foreign' | 'exchange' | 'deposit' | '
 const Index = () => {
   const { t } = useLanguage();
   const [selectedService, setSelectedService] = useState<ServiceType>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [stateKey, setStateKey] = useState<string | null>(null);
+
+  const getTicketType = (serviceId: ServiceType): string | null => {
+    const ticketTypeMap = {
+      'withdrawal': 'WithdrawalAboveLimit',
+      'kyc': 'UpdateKYC',
+      'deposit': 'DepositAboveLimit'
+    };
+    return ticketTypeMap[serviceId as keyof typeof ticketTypeMap] || null;
+  };
+
+  const handleServiceClick = async (serviceId: ServiceType) => {
+    const ticketType = getTicketType(serviceId);
+    
+    // If service doesn't need API call, open modal directly
+    if (!ticketType) {
+      setSelectedService(serviceId);
+      return;
+    }
+    
+    setIsLoading(true);
+    
+    try {
+      const response = await fetch(
+        `https://domain:port/api/Ticket/${ticketType}/initiate`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      
+      if (response.ok && response.status === 200) {
+        const data = await response.json();
+        
+        // Save stateKey for future API requests
+        setStateKey(data.stateKey);
+        
+        // Open the modal
+        setSelectedService(serviceId);
+      } else {
+        // Handle non-200 responses
+        toast({
+          title: 'Error',
+          description: 'Failed to initiate service. Please try again.',
+          variant: 'destructive',
+          duration: 5000,
+        });
+      }
+    } catch (error) {
+      console.error('API Error:', error);
+      toast({
+        title: 'Error',
+        description: 'Unable to connect to the service. Please check your connection.',
+        variant: 'destructive',
+        duration: 5000,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const services = [
     {
@@ -109,12 +173,26 @@ const Index = () => {
                 icon={service.icon}
                 title={service.title}
                 description={service.description}
-                onClick={() => setSelectedService(service.id)}
+                onClick={() => handleServiceClick(service.id)}
               />
             ))}
           </div>
         </div>
       </main>
+
+      {/* Loading Overlay */}
+      {isLoading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="rounded-lg bg-card p-8 shadow-xl">
+            <div className="flex flex-col items-center gap-4">
+              <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
+              <p className="text-lg font-medium text-foreground">
+                {t('initiatingService')}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       <footer className="mt-auto border-t border-border py-8">
         <div className="container mx-auto px-6 text-center">
@@ -127,12 +205,16 @@ const Index = () => {
       {currentService && (
         <ServiceModal
           isOpen={!!selectedService}
-          onClose={() => setSelectedService(null)}
+          onClose={() => {
+            setSelectedService(null);
+            setStateKey(null);
+          }}
           serviceType={selectedService}
           icon={currentService.icon}
           title={currentService.title}
           description={currentService.description}
           details={currentService.details}
+          stateKey={stateKey}
         />
       )}
     </div>

@@ -28,9 +28,10 @@ import {
 
 interface WithdrawalFormProps {
   onClose?: () => void;
+  stateKey?: string | null;
 }
 
-export const WithdrawalForm = ({ onClose }: WithdrawalFormProps = {}) => {
+export const WithdrawalForm = ({ onClose, stateKey }: WithdrawalFormProps = {}) => {
   const { t } = useLanguage();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);

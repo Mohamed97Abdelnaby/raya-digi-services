@@ -28,9 +28,10 @@ import { useToast } from '@/hooks/use-toast';
 
 interface DepositFormProps {
   onClose?: () => void;
+  stateKey?: string | null;
 }
 
-export const DepositForm = ({ onClose }: DepositFormProps = {}) => {
+export const DepositForm = ({ onClose, stateKey }: DepositFormProps = {}) => {
   const { t } = useLanguage();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
