@@ -309,8 +309,8 @@ export const UnifiedServiceForm = ({
         const data = await response.json();
         
         toast({
-          title: 'Success',
-          description: data.message || 'Print request recorded successfully',
+          title: '✅ Print Request Recorded',
+          description: data.message || 'Printing receipt... A print dialog will appear.',
           duration: 3000,
         });
         
@@ -323,8 +323,8 @@ export const UnifiedServiceForm = ({
         const errorData = await response.json().catch(() => ({}));
         
         toast({
-          title: 'Print Error',
-          description: errorData.message || 'Failed to process print request.',
+          title: '❌ Print Failed',
+          description: errorData.message || 'Failed to print ticket. Please try again.',
           variant: 'destructive',
           duration: 5000,
         });
@@ -480,7 +480,7 @@ ${t('kycSuccess')}`;
 
   if (currentStep === 'success') {
     return (
-      <div className="space-y-6">
+      <div className="printable-receipt space-y-6">
         {/* Success Icon & Message */}
         <div className="flex flex-col items-center justify-center py-8 space-y-4">
           <div className="rounded-full bg-primary/10 p-6">

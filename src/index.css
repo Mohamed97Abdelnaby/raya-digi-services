@@ -117,26 +117,68 @@ All colors MUST be HSL.
 }
 
 @media print {
-  /* Hide everything except the printable content */
+  /* Hide everything by default */
   body * {
     visibility: hidden;
   }
   
-  .print\:block,
-  .print\:block * {
+  /* Show only the printable receipt */
+  .printable-receipt,
+  .printable-receipt * {
     visibility: visible;
   }
   
-  .print\:block {
+  /* Position printable content at top */
+  .printable-receipt {
     position: absolute;
     left: 0;
     top: 0;
     width: 100%;
   }
   
-  /* Hide buttons and non-printable elements */
+  /* Page settings */
+  @page {
+    size: A4 portrait;
+    margin: 2cm;
+  }
+  
+  /* Hide buttons, dialogs, and UI elements */
   button,
+  .dialog-close-button,
+  .toast,
+  .header,
+  .navigation,
+  .sidebar,
   .no-print {
     display: none !important;
+  }
+  
+  /* Optimize typography for print */
+  body {
+    font-size: 12pt;
+    line-height: 1.5;
+    color: #000;
+    background: #fff;
+  }
+  
+  /* Prevent page breaks inside important sections */
+  .receipt-section {
+    page-break-inside: avoid;
+  }
+  
+  /* Hide screen-only elements */
+  .print\:hidden {
+    display: none !important;
+  }
+  
+  /* Show print-only elements */
+  .print\:block {
+    display: block !important;
+    visibility: visible !important;
+  }
+  
+  .print\:flex {
+    display: flex !important;
+    visibility: visible !important;
   }
 }
