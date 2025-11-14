@@ -43,6 +43,7 @@ export const WithdrawalForm = ({ onClose, stateKey, onStateKeyUpdate, onFormSubm
   const [showThankYou, setShowThankYou] = useState(false);
   const [isScanningId, setIsScanningId] = useState(false);
   const [isScanSuccessful, setIsScanSuccessful] = useState(false);
+  const [isSendingWhatsApp, setIsSendingWhatsApp] = useState(false);
 
   const {
     register,
@@ -259,6 +260,8 @@ export const WithdrawalForm = ({ onClose, stateKey, onStateKeyUpdate, onFormSubm
   const handleWhatsAppShare = async () => {
     if (!submittedData || !stateKey) return;
     
+    setIsSendingWhatsApp(true);
+    
     try {
       const response = await fetch(
         getApiUrl(`/api/Ticket/WithdrawalAboveLimit/${stateKey}/send-WhatsApp`),
@@ -315,6 +318,8 @@ ${t('withdrawalSuccess')}
         variant: 'destructive',
         duration: 5000,
       });
+    } finally {
+      setIsSendingWhatsApp(false);
     }
   };
 
@@ -414,13 +419,23 @@ ${t('withdrawalSuccess')}
             <Printer className="mr-2 h-4 w-4" />
             {t('printForm')}
           </Button>
-          <Button
-            onClick={handleWhatsAppShare}
-            className="w-full bg-[#25D366] hover:bg-[#20BA5A] text-white"
-          >
-            <MessageCircle className="mr-2 h-4 w-4" />
-            {t('sendWhatsApp')}
-          </Button>
+              <Button
+                onClick={handleWhatsAppShare}
+                className="w-full bg-[#25D366] hover:bg-[#20BA5A] text-white"
+                disabled={isSendingWhatsApp}
+              >
+                {isSendingWhatsApp ? (
+                  <>
+                    <span className="h-4 w-4 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    {t('sendingWhatsApp')}
+                  </>
+                ) : (
+                  <>
+                    <MessageCircle className="mr-2 h-4 w-4" />
+                    {t('sendWhatsApp')}
+                  </>
+                )}
+              </Button>
         </div>
 
         {/* Exit Button */}
@@ -547,16 +562,16 @@ ${t('withdrawalSuccess')}
       <Button
         type="submit"
         className="w-full"
-        disabled={isSubmitting || !isValid || !isScanSuccessful}
-      >
-        {isSubmitting ? (
-          <span className="flex items-center gap-2">
-            <span className="h-4 w-4 border-2 border-background border-t-transparent rounded-full animate-spin" />
-            {t('submitRequest')}
-          </span>
-        ) : (
-          t('submitRequest')
-        )}
+            disabled={isSubmitting || !isValid || !isScanSuccessful}
+          >
+            {isSubmitting ? (
+              <span className="flex items-center gap-2">
+                <span className="h-4 w-4 border-2 border-background border-t-transparent rounded-full animate-spin" />
+                {t('confirmButton')}
+              </span>
+            ) : (
+              t('confirmButton')
+            )}
       </Button>
     </form>
   );

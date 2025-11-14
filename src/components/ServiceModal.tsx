@@ -59,31 +59,47 @@ export const ServiceModal = ({
   const handleDialogClose = async (open: boolean) => {
     // If trying to close the dialog (open = false)
     if (!open) {
-      // Only apply API logic to the 3 main services that have been submitted
+      // Only apply API logic if form has been submitted and we have a stateKey
       if (isFormSubmitted && currentStateKey) {
         const isWithdrawal = serviceType === 'withdrawal';
         const isDeposit = serviceType === 'deposit';
         const isKYC = serviceType === 'kyc';
+        const isWhatsAppOnlyService = ['foreign', 'exchange', 'statement', 'chequebook', 'mobile', 'chequeencashment'].includes(serviceType || '');
 
-        if (isWithdrawal || isDeposit || isKYC) {
+        // All 9 services should call close-ticket API
+        if (isWithdrawal || isDeposit || isKYC || isWhatsAppOnlyService) {
           setIsClosing(true);
           
           try {
-            // Determine the correct TicketType
-            let ticketType = '';
-            if (isWithdrawal) ticketType = 'WithdrawalAboveLimit';
-            else if (isDeposit) ticketType = 'DepositAboveLimit';
-            else if (isKYC) ticketType = 'UpdateKYC';
+            // Determine the correct API endpoint
+            let apiEndpoint = '';
             
-            const response = await fetch(
-              getApiUrl(`/api/Ticket/${ticketType}/${currentStateKey}/close-ticket`),
-              {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-              }
-            );
+            if (isWithdrawal) {
+              apiEndpoint = getApiUrl(`/api/Ticket/WithdrawalAboveLimit/${currentStateKey}/close-ticket`);
+            } else if (isDeposit) {
+              apiEndpoint = getApiUrl(`/api/Ticket/DepositAboveLimit/${currentStateKey}/close-ticket`);
+            } else if (isKYC) {
+              apiEndpoint = getApiUrl(`/api/Ticket/UpdateKYC/${currentStateKey}/close-ticket`);
+            } else if (isWhatsAppOnlyService) {
+              // Map service type to InTicket type
+              const ticketTypeMap: Record<string, string> = {
+                'foreign': 'ForeignCurrencyWithdrawal',
+                'exchange': 'MoneyExchange',
+                'statement': 'StatementPrinting',
+                'chequebook': 'ChequeBookRequest',
+                'mobile': 'MobilePrestaging',
+                'chequeencashment': 'ChequeEncashment'
+              };
+              const ticketType = ticketTypeMap[serviceType || ''];
+              apiEndpoint = getApiUrl(`/api/InTicket/${ticketType}/${currentStateKey}/close-ticket`);
+            }
+            
+            const response = await fetch(apiEndpoint, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            });
             
             if (response.ok && response.status === 200) {
               const data = await response.json();
@@ -124,7 +140,7 @@ export const ServiceModal = ({
         }
       }
       
-      // For other services or not submitted, close directly
+      // For other cases (not submitted or no stateKey), close directly
       onClose();
     }
   };

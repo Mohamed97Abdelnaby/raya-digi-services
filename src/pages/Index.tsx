@@ -150,7 +150,7 @@ const Index = () => {
       <header className="border-b border-border bg-card">
         <div className="container mx-auto flex items-center justify-between px-6 py-3">
           <div className="flex items-center gap-4">
-            <img src={rayaLogo} alt="Raya Information Technology" className="h-20 w-auto" />
+            <img src={rayaLogo} alt="Raya Information Technology" className="h-28 w-auto" />
           </div>
           <LanguageToggle />
         </div>
