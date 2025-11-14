@@ -59,8 +59,8 @@ export const ServiceModal = ({
   const handleDialogClose = async (open: boolean) => {
     // If trying to close the dialog (open = false)
     if (!open) {
-      // Only apply API logic if form has been submitted and we have a stateKey
-      if (isFormSubmitted && currentStateKey) {
+      // Only apply API logic if we have a stateKey (regardless of submission status)
+      if (currentStateKey) {
         const isWithdrawal = serviceType === 'withdrawal';
         const isDeposit = serviceType === 'deposit';
         const isKYC = serviceType === 'kyc';
