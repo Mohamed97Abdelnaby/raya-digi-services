@@ -64,6 +64,7 @@ export const UnifiedServiceForm = ({
   const [showThankYou, setShowThankYou] = useState(false);
   const [isScanningId, setIsScanningId] = useState(false);
   const [isScanSuccessful, setIsScanSuccessful] = useState(false);
+  const [isSendingWhatsApp, setIsSendingWhatsApp] = useState(false);
 
   const {
     register,
@@ -344,6 +345,8 @@ export const UnifiedServiceForm = ({
 
   const handleWhatsAppShare = async () => {
     if (!formData || !stateKey) return;
+    
+    setIsSendingWhatsApp(true);
 
     try {
       let apiEndpoint = '';
@@ -416,6 +419,8 @@ ${t('kycSuccess')}`;
         variant: 'destructive',
         duration: 5000,
       });
+    } finally {
+      setIsSendingWhatsApp(false);
     }
   };
 
@@ -532,13 +537,23 @@ ${t('kycSuccess')}`;
               <Printer className="mr-2 h-4 w-4" />
               {t('printForm')}
             </Button>
-            <Button
-              onClick={handleWhatsAppShare}
-              className="w-full bg-[#25D366] hover:bg-[#20BA5A] text-white"
-            >
-              <MessageCircle className="mr-2 h-4 w-4" />
-              {t('sendWhatsApp')}
-            </Button>
+                <Button
+                  onClick={handleWhatsAppShare}
+                  className="w-full bg-[#25D366] hover:bg-[#20BA5A] text-white"
+                  disabled={isSendingWhatsApp}
+                >
+                  {isSendingWhatsApp ? (
+                    <>
+                      <span className="h-4 w-4 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      {t('sendingWhatsApp')}
+                    </>
+                  ) : (
+                    <>
+                      <MessageCircle className="mr-2 h-4 w-4" />
+                      {t('sendWhatsApp')}
+                    </>
+                  )}
+                </Button>
           </div>
         )}
 
@@ -548,9 +563,19 @@ ${t('kycSuccess')}`;
             <Button
               onClick={handleWhatsAppShare}
               className="w-full bg-[#25D366] hover:bg-[#20BA5A] text-white"
+              disabled={isSendingWhatsApp}
             >
-              <MessageCircle className="mr-2 h-4 w-4" />
-              {t('sendWhatsApp')}
+              {isSendingWhatsApp ? (
+                <>
+                  <span className="h-4 w-4 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  {t('sendingWhatsApp')}
+                </>
+              ) : (
+                <>
+                  <MessageCircle className="mr-2 h-4 w-4" />
+                  {t('sendWhatsApp')}
+                </>
+              )}
             </Button>
           </div>
         )}
@@ -656,14 +681,21 @@ ${t('kycSuccess')}`;
         </>
       )}
 
-      <Button
-        type="submit"
-        className="w-full"
-        size="lg"
-        disabled={isSubmitting || !isValid || (showScanButton && !isScanSuccessful)}
-      >
-        {t('confirmButton')}
-      </Button>
+          <Button
+            type="submit"
+            className="w-full"
+            size="lg"
+            disabled={isSubmitting || !isValid || (showScanButton && !isScanSuccessful)}
+          >
+            {isSubmitting ? (
+              <span className="flex items-center gap-2">
+                <span className="h-4 w-4 border-2 border-background border-t-transparent rounded-full animate-spin" />
+                {t('confirmButton')}
+              </span>
+            ) : (
+              t('confirmButton')
+            )}
+          </Button>
     </form>
   );
 };
