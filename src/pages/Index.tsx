@@ -5,6 +5,7 @@ import { LanguageToggle } from '@/components/LanguageToggle';
 import { ServiceCard } from '@/components/ServiceCard';
 import { ServiceModal } from '@/components/ServiceModal';
 import { toast } from '@/hooks/use-toast';
+import { getApiUrl } from '@/lib/apiConfig';
 import rayaLogo from '@/assets/raya-logo-new.png';
 
 type ServiceType = 'withdrawal' | 'kyc' | 'foreign' | 'exchange' | 'deposit' | 'statement' | 'chequebook' | 'mobile' | 'chequeencashment' | null;
@@ -37,7 +38,7 @@ const Index = () => {
     
     try {
       const response = await fetch(
-        `https://domain:port/api/Ticket/${ticketType}/initiate`,
+        getApiUrl(`/api/Ticket/${ticketType}/initiate`),
         {
           method: 'POST',
           headers: {

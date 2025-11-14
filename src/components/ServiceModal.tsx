@@ -9,6 +9,7 @@ import {
 import { LucideIcon } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useToast } from '@/hooks/use-toast';
+import { getApiUrl } from '@/lib/apiConfig';
 import { WithdrawalForm } from '@/components/WithdrawalForm';
 import { DepositForm } from '@/components/DepositForm';
 import { UnifiedServiceForm } from '@/components/UnifiedServiceForm';
@@ -75,7 +76,7 @@ export const ServiceModal = ({
             else if (isKYC) ticketType = 'UpdateKYC';
             
             const response = await fetch(
-              `https://domain:port/api/Ticket/${ticketType}/${currentStateKey}/close-ticket`,
+              getApiUrl(`/api/Ticket/${ticketType}/${currentStateKey}/close-ticket`),
               {
                 method: 'POST',
                 headers: {

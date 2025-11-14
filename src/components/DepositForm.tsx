@@ -25,6 +25,7 @@ import {
 import { useLanguage } from '@/contexts/LanguageContext';
 import { depositSchema, type DepositFormData } from '@/lib/validations/depositSchema';
 import { useToast } from '@/hooks/use-toast';
+import { getApiUrl } from '@/lib/apiConfig';
 
 interface DepositFormProps {
   onClose?: () => void;
@@ -74,7 +75,7 @@ export const DepositForm = ({ onClose, stateKey, onStateKeyUpdate, onFormSubmitt
     
     try {
       const response = await fetch(
-        `https://domain:port/api/Ticket/DepositAboveLimit/${stateKey}/confirm`,
+        getApiUrl(`/api/Ticket/DepositAboveLimit/${stateKey}/confirm`),
         {
           method: 'POST',
           headers: {
@@ -152,7 +153,7 @@ export const DepositForm = ({ onClose, stateKey, onStateKeyUpdate, onFormSubmitt
     
     try {
       const response = await fetch(
-        `https://domain:port/api/Ticket/DepositAboveLimit/${stateKey}/scan-id`,
+        getApiUrl(`/api/Ticket/DepositAboveLimit/${stateKey}/scan-id`),
         {
           method: 'POST',
           headers: {
@@ -210,7 +211,7 @@ export const DepositForm = ({ onClose, stateKey, onStateKeyUpdate, onFormSubmitt
     
     try {
       const response = await fetch(
-        `https://domain:port/api/Ticket/DepositAboveLimit/${stateKey}/print`,
+        getApiUrl(`/api/Ticket/DepositAboveLimit/${stateKey}/print`),
         {
           method: 'POST',
           headers: {
@@ -260,7 +261,7 @@ export const DepositForm = ({ onClose, stateKey, onStateKeyUpdate, onFormSubmitt
     
     try {
       const response = await fetch(
-        `https://domain:port/api/Ticket/DepositAboveLimit/${stateKey}/send-WhatsApp`,
+        getApiUrl(`/api/Ticket/DepositAboveLimit/${stateKey}/send-WhatsApp`),
         {
           method: 'POST',
           headers: {
@@ -322,7 +323,7 @@ ${t('depositSuccess')}
     
     try {
       const response = await fetch(
-        `https://domain:port/api/Ticket/DepositAboveLimit/${stateKey}/close-ticket`,
+        getApiUrl(`/api/Ticket/DepositAboveLimit/${stateKey}/close-ticket`),
         {
           method: 'POST',
           headers: {
