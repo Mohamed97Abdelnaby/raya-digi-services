@@ -9,6 +9,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { unifiedServiceSchema, UnifiedServiceFormData } from '@/lib/validations/unifiedServiceSchema';
 import { useToast } from '@/hooks/use-toast';
+import { getApiUrl } from '@/lib/apiConfig';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -96,7 +97,7 @@ export const UnifiedServiceForm = ({
         };
         
         const response = await fetch(
-          `https://domain:port/api/InTicket/${ticketType}/initiate`,
+          getApiUrl(`/api/InTicket/${ticketType}/initiate`),
           {
             method: 'POST',
             headers: {
@@ -162,7 +163,7 @@ export const UnifiedServiceForm = ({
 
       try {
         const response = await fetch(
-          `https://domain:port/api/Ticket/UpdateKYC/${stateKey}/confirm`,
+          getApiUrl(`/api/Ticket/UpdateKYC/${stateKey}/confirm`),
           {
             method: 'POST',
             headers: {
@@ -238,7 +239,7 @@ export const UnifiedServiceForm = ({
     
     try {
       const response = await fetch(
-        `https://domain:port/api/Ticket/UpdateKYC/${stateKey}/scan-id`,
+        getApiUrl(`/api/Ticket/UpdateKYC/${stateKey}/scan-id`),
         {
           method: 'POST',
           headers: {
@@ -296,7 +297,7 @@ export const UnifiedServiceForm = ({
     
     try {
       const response = await fetch(
-        `https://domain:port/api/Ticket/UpdateKYC/${stateKey}/print`,
+        getApiUrl(`/api/Ticket/UpdateKYC/${stateKey}/print`),
         {
           method: 'POST',
           headers: {
@@ -360,10 +361,10 @@ export const UnifiedServiceForm = ({
           return;
         }
         
-        apiEndpoint = `https://domain:port/api/InTicket/${ticketType}/${stateKey}/send-msg-whatsapp`;
+        apiEndpoint = getApiUrl(`/api/InTicket/${ticketType}/${stateKey}/send-msg-whatsapp`);
       } else {
         // KYC service
-        apiEndpoint = `https://domain:port/api/Ticket/UpdateKYC/${stateKey}/send-WhatsApp`;
+        apiEndpoint = getApiUrl(`/api/Ticket/UpdateKYC/${stateKey}/send-WhatsApp`);
       }
       
       const response = await fetch(apiEndpoint, {
@@ -433,10 +434,10 @@ ${t('kycSuccess')}`;
           return;
         }
         
-        apiEndpoint = `https://domain:port/api/InTicket/${ticketType}/${stateKey}/close-ticket`;
+        apiEndpoint = getApiUrl(`/api/InTicket/${ticketType}/${stateKey}/close-ticket`);
       } else {
         // KYC service
-        apiEndpoint = `https://domain:port/api/Ticket/UpdateKYC/${stateKey}/close-ticket`;
+        apiEndpoint = getApiUrl(`/api/Ticket/UpdateKYC/${stateKey}/close-ticket`);
       }
       
       const response = await fetch(apiEndpoint, {

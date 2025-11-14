@@ -15,6 +15,7 @@ import {
 import { useLanguage } from '@/contexts/LanguageContext';
 import { withdrawalSchema, type WithdrawalFormData } from '@/lib/validations/withdrawalSchema';
 import { useToast } from '@/hooks/use-toast';
+import { getApiUrl } from '@/lib/apiConfig';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
   AlertDialog,
@@ -74,7 +75,7 @@ export const WithdrawalForm = ({ onClose, stateKey, onStateKeyUpdate, onFormSubm
     
     try {
       const response = await fetch(
-        `https://domain:port/api/Ticket/WithdrawalAboveLimit/${stateKey}/confirm`,
+        getApiUrl(`/api/Ticket/WithdrawalAboveLimit/${stateKey}/confirm`),
         {
           method: 'POST',
           headers: {
@@ -152,7 +153,7 @@ export const WithdrawalForm = ({ onClose, stateKey, onStateKeyUpdate, onFormSubm
     
     try {
       const response = await fetch(
-        `https://domain:port/api/Ticket/WithdrawalAboveLimit/${stateKey}/scan-id`,
+        getApiUrl(`/api/Ticket/WithdrawalAboveLimit/${stateKey}/scan-id`),
         {
           method: 'POST',
           headers: {
@@ -210,7 +211,7 @@ export const WithdrawalForm = ({ onClose, stateKey, onStateKeyUpdate, onFormSubm
     
     try {
       const response = await fetch(
-        `https://domain:port/api/Ticket/WithdrawalAboveLimit/${stateKey}/print`,
+        getApiUrl(`/api/Ticket/WithdrawalAboveLimit/${stateKey}/print`),
         {
           method: 'POST',
           headers: {
@@ -260,7 +261,7 @@ export const WithdrawalForm = ({ onClose, stateKey, onStateKeyUpdate, onFormSubm
     
     try {
       const response = await fetch(
-        `https://domain:port/api/Ticket/WithdrawalAboveLimit/${stateKey}/send-WhatsApp`,
+        getApiUrl(`/api/Ticket/WithdrawalAboveLimit/${stateKey}/send-WhatsApp`),
         {
           method: 'POST',
           headers: {
@@ -322,7 +323,7 @@ ${t('withdrawalSuccess')}
     
     try {
       const response = await fetch(
-        `https://domain:port/api/Ticket/WithdrawalAboveLimit/${stateKey}/close-ticket`,
+        getApiUrl(`/api/Ticket/WithdrawalAboveLimit/${stateKey}/close-ticket`),
         {
           method: 'POST',
           headers: {
